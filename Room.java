@@ -5,7 +5,7 @@ public class Room{
   public String roomName ;
   public int shotMarker ;
   private int shotsRemaining ;
-  public Scene currentScene ;
+  public SceneCard currentScene ;
   public Role[] extraRoles ;
   public Room[] adjacentRooms ;
   public Player[] playersInRoom ;
@@ -16,7 +16,7 @@ public class Room{
   }
 
   // Assigns a new scene
-  public void setScene(Scene scene){
+  public void setScene(SceneCard scene){
 
   }
 
