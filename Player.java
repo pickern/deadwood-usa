@@ -40,23 +40,23 @@ public class Player{
 
   // Getters
   public int getMoney(){
-
+    return 0 ;
   }
 
   public int getFame(){
-
+    return 0  ;
   }
 
   public int getRank(){
-
+    return 0 ;
   }
 
   public int getScore(){
-
+    return 0 ;
   }
 
   public int getRehearsalBonus(){
-
+    return 0 ;
   }
 
 }

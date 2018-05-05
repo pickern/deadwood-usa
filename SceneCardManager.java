@@ -27,7 +27,7 @@ public class SceneCardManager {
 
   // Returns number of scenes in play
   public int activeScenes(){
-
+    return 0 ;
   }
 
 }
