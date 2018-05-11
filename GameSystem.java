@@ -1,54 +1,53 @@
-// C.Speckhardt // speckhc // W01240690 // CSCI 345 // 2018.05.04 // 
+// C.Speckhardt // speckhc // W01240690 // CSCI 345 // 2018.05.04 //
 
 
 // Game System Class
 
 public class GameSystem{
-      
+
       // attributes
       private int daysRemaining;
       private Player[] players;
-      public Player currentPlay;
+      public static Player currentPlay;
       public Player nextPlay;
-      
-      // constructor 
+
+      // constructor
       public GameSystem(int numPlayers){
-            
-            initialize();     
-            
+
+            initialize();
+
       }
-  //••••••••••••••••••••••••••••••••••••• INITIALIZE ••••••••••••••••••••••••••••••••••••     
-     
+  //••••••••••••••••••••••••••••••••••••• INITIALIZE ••••••••••••••••••••••••••••••••••••
+
       public void initialize(){
-      
-            
+
+
       }
-      
- //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••     
+
+ //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••
 
       public void display(){
-      
+
       }
-      
-  //••••••••••••••••••••••••••••••••••••• DAY ••••••••••••••••••••••••••••••••••••     
-     
+
+  //••••••••••••••••••••••••••••••••••••• DAY ••••••••••••••••••••••••••••••••••••
+
       private void day(){
-      
-      
+
+
       }
-      
-  //••••••••••••••••••••••••••••••••••••• ROLL ••••••••••••••••••••••••••••••••••••     
-      
-      public int roll(){
-      
+
+  //••••••••••••••••••••••••••••••••••••• ROLL ••••••••••••••••••••••••••••••••••••
+
+      public static int roll(){ //Make static
+
             return 0;
       }
-      
-  //••••••••••••••••••••••••••••••••••••• ENDGAME ••••••••••••••••••••••••••••••••••••     
-      
+
+  //••••••••••••••••••••••••••••••••••••• ENDGAME ••••••••••••••••••••••••••••••••••••
+
       private void endGame(){
-      
-      
+
       }
 
 }
