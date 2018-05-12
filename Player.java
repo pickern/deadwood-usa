@@ -8,10 +8,12 @@
 //  - Review playerInfo and make sure all necessary info can be printed when needed
 
 import java.lang.StringBuilder ;
+import java.util.Random ;
 
 public class Player{
 
   static int PLAYER_COUNT ;
+  static Random rand = new Random();
   private int money ;
   private int fame ;
   private int rank ;

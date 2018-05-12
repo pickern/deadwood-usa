@@ -8,12 +8,14 @@
 import java.lang.StringBuilder ;
 import java.util.Arrays ;
 import java.util.* ;
+import java.util.Random ;
 
 public class Room{
 
   // Attributes
   public String roomName ;
   public int shotMarkers ;
+  static Random rand = new Random() ;
   public int shotsRemaining ;
   public SceneCard currentScene ;
   public Role[] extraRoles ; // Roles should be listed highest paid to lowest
@@ -106,7 +108,7 @@ public class Room{
     if(onCard){
       PriorityQueue<Integer> dice = new PriorityQueue(Collections.reverseOrder()) ;
       for(int i = 0; i < currentScene.budget; i++){ // roll dice
-        dice.offer(roll()) ;
+        dice.offer(rand.nextInt(6)) ;
       }
 
       // Pay on card actors
