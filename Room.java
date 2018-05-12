@@ -116,14 +116,14 @@ public class Room{
         int diceTemp = dice.poll() ;
         // Will loop through roles higest to lowest if ordered correctly
         if(currentScene.roles[i % currentScene.roles.length].taken){
-          currentScene.roles[i % currentScene.roles.length].workingPlayer.changeMoney(diceTemp) ;
+          //currentScene.roles[i % currentScene.roles.length].workingPlayer.changeMoney(diceTemp) ;
         }
       }
 
       // Pay off card actors
       for(Role role: extraRoles){
         if(role.taken){
-          role.workingPlayer.changeMoney(role.reqRank) ;
+          //role.workingPlayer.changeMoney(role.reqRank) ;
         }
       }
     }
