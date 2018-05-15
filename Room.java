@@ -1,14 +1,28 @@
 // Room class for Deadwood USA
-// TODO:
-//  - Some methods might need to print out information to keep players updated
-//    - particularly, wrapScene
-//  - Test with GameSystem and SceneCard
-//  - Implement roll in here instead of game system
+//
+// Changes (Nick):
+//  - Added readRooms()
+//  - Added stringToRoom()
+//  - Added enter() and exit() to track player movements, not sure if this is the best way tho
+//  - Made trailers and casting office static
+//  - Changes adjacentRooms from a Room[] to a String[] (Keeps other classes from having to use Room objects as much, made reading in the room info a lot easier too)
+
 
 import java.lang.StringBuilder ;
 import java.util.Arrays ;
 import java.util.* ;
 import java.util.Random ;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+
+import java.io.File;
+
 
 public class Room{
 
@@ -19,8 +33,10 @@ public class Room{
   public int shotsRemaining ;
   public SceneCard currentScene ;
   public Role[] extraRoles ; // Roles should be listed highest paid to lowest
-  public Room[] adjacentRooms ;
+  public String[] adjacentRooms ;
   private ArrayDeque<Player> playersInRoom ;
+  static Room trailers ; // Special rooms
+  static Room office ;
   static ArrayDeque<Room> sets = new ArrayDeque(); // For rooms with sceneCards
 
   ///* Main method for testing
@@ -35,7 +51,7 @@ public class Room{
   }//*/
 
   // Constructor
-  public Room(String name, int shots, Room[] adjacents, Role[] roles){
+  public Room(String name, int shots, String[] adjacents, Role[] roles){
     roomName = name ;
     shotMarkers = shots ;
     shotsRemaining = shots ;
@@ -44,9 +60,127 @@ public class Room{
     if(!(name.equals("Casting Office") || name.equals("Trailers"))){
       sets.add(this) ;
     }
+
+    playersInRoom = new ArrayDeque() ;
   }
 
-  // For tracking player movement
+  // Reads in info from board.xml
+  public static void readRooms(){
+    try{
+      File cardsXML = new File("board.xml") ;
+      DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance() ;
+	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder() ;
+	    Document doc = dBuilder.parse(cardsXML) ;
+      NodeList sets = doc.getElementsByTagName("set") ;
+      NodeList parts = doc.getElementsByTagName("parts") ;
+
+      // Room constructor parameters
+      String roomName ;
+      int shots ;
+      String[] adjacentRooms ;
+      Role[] roomRoles ;
+
+      // Role constructor parameters
+      String roleName ;
+      String line ;
+      int reqRank ;
+
+      // Create sets
+      for(int i = 0; i < sets.getLength(); i++){
+        // Set we're creating
+        Element set = (Element) sets.item(i) ;
+
+        roomName = set.getAttributes().getNamedItem("name").getNodeValue() ;
+        shots = set.getElementsByTagName("take").getLength() ;
+
+        // Creates String[] of adjacent rooms
+        NodeList neighbors = set.getElementsByTagName("neighbor") ;
+        adjacentRooms = new String[neighbors.getLength()] ;
+        for(int k = 0; k < neighbors.getLength(); k++){
+          adjacentRooms[k] = neighbors.item(k).getAttributes().getNamedItem("name").getNodeValue();
+        }
+
+        // Create Roles for set
+        NodeList roles = set.getElementsByTagName("part") ;
+        roomRoles = new Role[roles.getLength()] ;
+        for(int j = 0; j < roles.getLength(); j++){
+          roleName = roles.item(j).getAttributes().getNamedItem("name").getNodeValue() ;
+          reqRank = Integer.parseInt(roles.item(j).getAttributes().getNamedItem("level").getNodeValue()) ;
+          line = ((Element)roles.item(j)).getElementsByTagName("line").item(0).getTextContent() ;
+          roomRoles[j] = new Role(roleName, line, reqRank) ;
+        }
+
+        // Add to sets
+        Room.sets.add(new Room(roomName, shots, adjacentRooms, roomRoles)) ;
+      }
+
+      // Create trailers and casting office
+      Element trailerE = (Element) doc.getElementsByTagName("trailer").item(0) ;
+      Element officeE = (Element) doc.getElementsByTagName("office").item(0) ;
+      String[] tadjacentRooms = new String[3] ;
+      String[] oadjacentRooms = new String[3] ;
+      NodeList tneighbors = trailerE.getElementsByTagName("neighbor") ;
+      NodeList oneighbors = officeE.getElementsByTagName("neighbor") ;
+      // Read in neighbors
+      for(int i = 0; i < 3; i++){
+        tadjacentRooms[i] = tneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
+        oadjacentRooms[i] = oneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
+      }
+
+      Room.trailers = new Room("Trailers", -1, tadjacentRooms, null) ;
+      Room.office = new Room("Casting Office", -1, oadjacentRooms, null) ;
+
+    }catch(Exception e){
+      e.printStackTrace() ;
+    }
+
+  }
+
+  // Returns a String with room information
+  public String toString(){
+    StringBuilder sb = new StringBuilder() ;
+    sb.append(roomName) ;
+    if(this.currentScene != null){
+      // sb.append(currentScene.toString())
+    }
+    // Won't add roles for casting office and trailers
+    if(this.extraRoles != null){
+      sb.append("\n Roles") ;
+      for(int i = 0; i < extraRoles.length; i++){
+        sb.append("\n" + extraRoles[i].name) ;
+      }
+    }
+    return sb.toString() ;
+  }
+
+  // For player movement
+
+  // Shows available moves for player
+  public String getMoves(){
+    StringBuilder sb = new StringBuilder() ;
+    for(int i = 0; i < adjacentRooms.length; i++){
+      sb.append(adjacentRooms[i] + "\n") ;
+    }
+    return sb.toString() ;
+  }
+
+  // Returns a Room given String with roomName
+  public static Room stringToRoom(String name){
+    if(name.equals("Trailers")){
+      return Room.trailers ;
+    } else if(name.equals("Casting Office")){
+      return Room.office ;
+    } else {
+      for(Room room: sets){
+        if(room.roomName.equals(name)){
+          return room ;
+        }
+      }
+    }
+    System.out.println("No room found") ;
+    return null ;
+  }
+
   // Player leaves
   public void exit(Player player){
     playersInRoom.remove(player) ;
