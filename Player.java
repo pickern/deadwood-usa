@@ -4,8 +4,10 @@
 // TODO:
 //  - Decide on how to implement upgrade
 //  - Flesh out turn options
-//    - Particularly, how workOnRole and PassTurn will function
+//    - also, how workOnRole and PassTurn will function
 //  - Review playerInfo and make sure all necessary info can be printed when needed
+//  - Potentially make move take a String for destination since that might be
+//      the easiest way to store adjacentRooms in Room
 
 import java.lang.StringBuilder ;
 import java.util.Random ;
@@ -13,7 +15,7 @@ import java.util.Random ;
 public class Player{
 
   static int PLAYER_COUNT ;
-  static Random rand = new Random();
+  static Random rand = new Random() ;
   private int money ;
   private int fame ;
   private int rank ;
@@ -47,7 +49,8 @@ public class Player{
               "Money: $" + money + "\n" +
               "Fame: " + fame + "\n" +
               "Rank: " + rank + "\n" +
-              "Score: " + getScore() + "\n"
+              "Score: " + getScore() + "\n" +
+              "Location: " + location.roomName + "\n"
     ) ;
   }
 
@@ -128,7 +131,9 @@ public class Player{
 
   // Move
   public void move(Room destination){
-    location.exit(this) ;
+    if(location != null){
+      location.exit(this) ;
+    }
     location = destination ;
     location.enter(this) ;
   }
