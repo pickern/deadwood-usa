@@ -1,0 +1,261 @@
+// C.Speckhardt // speckhc // W01240690 // CSCI 345 // 2018.05.04 //
+
+// Changes (Nick)
+//  - Made attributes static
+//  - Added main
+//  - Added initialize()
+
+
+// Game System Class
+
+
+import java.util.ArrayList ;
+import java.util.Random ;
+import java.io.File ;
+import java.util.Scanner ;
+
+public class GameSystem{
+
+      // attributes
+      private static int days;
+      private static int currentDay;
+      private static ArrayList<Player> players;
+      public static Player currentPlay;
+      public static Player nextPlay;
+
+      public static void main(String[] args){
+      
+        if(args.length == 1 && Integer.parseInt(args[0]) > 1 && Integer.parseInt(args[0]) < 9){
+          initialize(Integer.parseInt(args[0])) ;
+        }else{
+          System.out.println("Error: Invalid number of players") ;
+        }
+        
+        // GameSystem test= new GameSystem(3);
+//             test.currentPlay= new Player ("Chris");
+//             test.turn();
+
+            initialize(5);
+      }
+
+      // constructor
+      public GameSystem(int numPlayers){
+            initialize(numPlayers); // call initialize
+      }
+  //••••••••••••••••••••••••••••••••••••• INITIALIZE ••••••••••••••••••••••••••••••••••••
+
+      public static void initialize(int playerCount){
+        // Welcome the players
+        try{
+          Scanner welcome = new Scanner(new File("welcome.txt")) ;
+          while (welcome.hasNextLine()){
+             System.out.println(welcome.nextLine());
+          }
+        }catch(Exception FileNotFoundException){
+          System.out.println("Welcome to Deadwood Studios, USA!");
+        }
+
+        // Build board
+        Room.readRooms() ;
+
+        // Make scene cards
+        SceneCardManager.readCards() ;
+
+        // Create Players
+        players = new ArrayList<Player>(playerCount) ;
+        System.out.println("\nPlayers: ") ;
+        for(int i = 0; i < playerCount; i++){
+          players.add(new Player()) ;
+          players.get(i).move(Room.trailers) ;
+          System.out.println(players.get(i).playerName) ;
+        }
+
+        // Different setups for different playerCounts
+        if(playerCount == 2 || playerCount == 3){
+          days = 3 ;
+        }else if(playerCount == 4){
+          days = 4 ;
+        }else if(playerCount == 5 || playerCount == 6) {
+          days = 4 ;
+          // Adds 2 fame for 5 players, 4 fame for 6 players
+          for(int i = 0; i < playerCount; i++){
+            players.get(i).changeFame((playerCount - 4) * 2)  ;
+          }
+        }else{
+          days = 4 ;
+          // If there are 7 or 8 players, players start at rank 2
+          for(int i = 0; i < playerCount; i++){
+            players.get(i).changeRank(2)  ;
+          }
+        }
+
+        // Determine first player
+        Random rand = new Random() ;
+        currentPlay = players.get(rand.nextInt(playerCount)) ;
+        int nextIndex= players.indexOf(currentPlay);
+        
+        if (nextIndex > players.size())
+                  nextIndex= nextIndex- players.size();
+        nextPlay= players.get(nextIndex +1);// initialization of nextPlay
+
+        System.out.println("\n" + currentPlay.playerName + " will be up first. Good luck!") ;
+
+        //System.out.println(currentPlay.playerInfo()) ;
+        
+        day(); // calls day to start the game
+      }
+
+ //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••
+
+      public static void display(){
+
+      }
+
+  //••••••••••••••••••••••••••••••••••••• DAY ••••••••••••••••••••••••••••••••••••
+
+      // Handles days
+      private static void day(){
+      
+            boolean endDay= false;
+            int count= 0; // for testing
+            
+            while (endDay== false){ // turns loop between players for as long as there are scenes
+                  
+                  turn();     // calls turn
+                  nextPlayer();     // updates currentPlay/ nextPlay
+                  count++;
+                  
+                  //check if day is over
+                  //if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
+                                                              // there will be only one scene card left
+                  
+                  if( count== 10)// ten loops for testing
+                        endDay= true;                       
+                        
+            }
+            if (currentDay == days) // finished the last day
+                  endGame();
+            else
+            days++; // increment days
+      }
+
+
+  //••••••••••••••••••••••••••••••••••••• TURN ••••••••••••••••••••••••••••••••••••
+
+      // Looks at currentPlay, presents options, handles turn decisions
+      
+      private static void turn(){
+            
+            System.out.println("It's "+ currentPlay.playerName+ "'s turn!"+ "\n");
+            System.out.println(currentPlay.playerInfo()) ;
+            
+            Scanner sc= new Scanner(System.in);
+            int answer= turnPrompt();
+            String destination;
+            
+            
+            if(answer == 1){ // act
+                  System.out.println("Acting... currentPlay.workOnRole() called.");
+                  currentPlay.workOnRole();
+                  
+                  
+            }
+            else if (answer ==2){ // rehearse
+                  System.out.println("Rehearsing... currentPlay.rehearse() called.");
+                  currentPlay.rehearse();
+            }
+            else if (answer ==3){ // move
+                  
+                  // display adjacent rooms
+                  System.out.println("Where would you like to move to?");
+                        destination= sc.next().toLowerCase();
+                        
+                  System.out.println("moving you to " + destination + "...");
+                  Room room = Room.stringToRoom(destination);
+                  currentPlay.move(room);
+                      
+                        // if destination is in currentPlayer.location.adjacentRooms()            
+            }
+            else if (answer ==4){ // pass 
+                  
+                  // new currentPlay
+                  // new nextPlay
+                  System.out.println(currentPlay.playerName + " passed, so...");
+                  nextPlayer();
+                  System.out.print("it's "+ currentPlay.playerName +"'s turn!");
+            }
+            else{
+                  System.out.println("There was an error with your input, let's try again.....");
+                  
+                  turn();
+                }      
+            nextPlayer(); // new currentPlay, nextPlay   
+            turn();   
+      }
+      
+//••••••••••••••••••••••••••••••••••••• NEXT PLAYER ••••••••••••••••••••••••••••••••••••
+
+      // next currentPlay, new nextPlay
+      
+      private static void nextPlayer(){
+            
+            int nextIndex= players.indexOf(nextPlay)+1; // indexed at 1 more than previous nextPlay
+            if (nextIndex > players.size()-1){
+                  nextIndex= nextIndex- players.size();
+            }
+                  currentPlay= nextPlay;
+                  nextPlay= players.get(nextIndex);     
+      }
+      
+  //••••••••••••••••••••••••••••••••••••• TurnPrompt ••••••••••••••••••••••••••••••••••••
+
+      // prompts user for turn input
+      private static int turnPrompt(){
+            Scanner sc= new Scanner(System.in);
+            int ans= 0;
+            
+            
+            while (ans == 0){// should loop while we don't have a proper response
+            
+            
+                  if (currentPlay.working== true){ // if working
+                   System.out.println("Would you like to act or rehearse?");
+                   String answer= sc.next();
+                  
+                        if(answer.toLowerCase().equals("act")){
+                              ans= 1;
+                        }
+                        else if(answer.toLowerCase().equals("rehearse")){
+                              ans= 2;
+                        }                  
+                            
+                  } // end if
+                  
+                  else{ // if not working
+                        System.out.println("Would you like to move or pass?");
+                        String answer= sc.next();    // get destination
+                                
+                        if(answer.toLowerCase().equals("move")){
+                              ans= 3;
+                        }
+                        else if(answer.toLowerCase().equals("pass")){
+                              ans= 4;
+                        }
+                              
+                  } // end else
+                  
+                  } // end while
+                  
+                  return ans;
+                  
+      }
+  //••••••••••••••••••••••••••••••••••••• ENDGAME ••••••••••••••••••••••••••••••••••••
+
+      // Total up score, annouce winner, prompt to restart
+      private static void endGame(){
+
+      }
+      
+      
+     
+}
