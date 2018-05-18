@@ -1,6 +1,4 @@
 // C.Speckhardt // speckhc // W01240690 // CSCI 345 // 2018.05.04 //
-
-
 // SceneCard Class
 
 public class SceneCard{

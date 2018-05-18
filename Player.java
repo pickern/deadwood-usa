@@ -20,18 +20,14 @@ public class Player{
   private int fame ;
   private int rank ;
   private int rehearsalBonus ;
-  private boolean working ;
+  public boolean working = false ; // everyone starts not working
   public Room location ;
   public String playerName ;
   public Role role ;
 
   ///* Main method for testing
   public static void main(String[] args){
-    Player thisplayer = new Player("Geroge") ;
-    thisplayer.changeRank(3) ;
-    thisplayer.changeMoney(4) ;
-    thisplayer.changeFame(10) ;
-    System.out.println(thisplayer.playerInfo()) ;
+
   }
   //*/
 
@@ -40,18 +36,23 @@ public class Player{
     PLAYER_COUNT ++ ;
     playerName = "Player " + PLAYER_COUNT ;
     rank = 1 ;
+    this.playerName = "Player " + PLAYER_COUNT ;
+    this.rank = 1 ;
 
   }
 
   // Returns player's information in a String
   public String playerInfo(){
-    return (playerName + "\n" +
+    int score = getScore();
+    String ans = (playerName + "\n" +
               "Money: $" + money + "\n" +
               "Fame: " + fame + "\n" +
               "Rank: " + rank + "\n" +
-              "Score: " + getScore() + "\n" +
+              "Score: " + score + "\n" +
               "Location: " + location.roomName + "\n"
     ) ;
+
+    return ans;
   }
 
   // Alternate constructor
@@ -158,6 +159,7 @@ public class Player{
   // Work on Role
   public void workOnRole(){
 
+
   }
 
   // Rehearse
@@ -165,9 +167,10 @@ public class Player{
     rehearsalBonus++ ;
   }
 
+
   // Upgrade (unsure about best way to implement)
   public void upgrade(int rankChange, int cost){
-
+      // chris
   }
 
 }

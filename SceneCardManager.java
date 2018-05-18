@@ -103,6 +103,7 @@ public class SceneCardManager {
     activeScenes.remove(card) ;
   }
 
+
   // Returns number of scenes in play
   public int activeScenes(){
     return activeScenes.size() ;
