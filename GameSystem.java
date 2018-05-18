@@ -35,7 +35,7 @@ public class GameSystem{
 //             test.currentPlay= new Player ("Chris");
 //             test.turn();
 
-            initialize(5);
+            initialize(3);
       }
 
       // constructor
@@ -92,15 +92,15 @@ public class GameSystem{
         // Determine first player
         Random rand = new Random() ;
         currentPlay = players.get(rand.nextInt(playerCount)) ;
-        int nextIndex= players.indexOf(currentPlay);
+        int nextIndex= players.indexOf(currentPlay)+1;
         
         if (nextIndex > players.size())
                   nextIndex= nextIndex- players.size();
-        nextPlay= players.get(nextIndex +1);// initialization of nextPlay
+        nextPlay= players.get(nextIndex);// initialization of nextPlay
 
-        System.out.println("\n" + currentPlay.playerName + " will be up first. Good luck!") ;
-
-        //System.out.println(currentPlay.playerInfo()) ;
+        System.out.println("\n" + currentPlay.playerName + " will be up first. Good luck! \n \n \n") ;
+        
+        currentDay= 1; // set day to 1
         
         day(); // calls day to start the game
       }
@@ -119,6 +119,9 @@ public class GameSystem{
             boolean endDay= false;
             int count= 0; // for testing
             
+            
+            // display day
+            System.out.println("It's day "+ currentDay + "! \n");
             while (endDay== false){ // turns loop between players for as long as there are scenes
                   
                   turn();     // calls turn
@@ -129,14 +132,18 @@ public class GameSystem{
                   //if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
                                                               // there will be only one scene card left
                   
-                  if( count== 10)// ten loops for testing
-                        endDay= true;                       
+                  if( count == 4){// ten loops for testing
+                        endDay();
+                        endDay= true;
+                   }                            
                         
             }
-            if (currentDay == days) // finished the last day
+            if (currentDay == 1) // finished the last day
                   endGame();
-            else
-            days++; // increment days
+            else{
+            currentDay++; // increment currentDay
+            day(); // call next day
+            }
       }
 
 
@@ -149,7 +156,6 @@ public class GameSystem{
             System.out.println("It's "+ currentPlay.playerName+ "'s turn!"+ "\n");
             System.out.println(currentPlay.playerInfo()) ;
             
-            Scanner sc= new Scanner(System.in);
             int answer= turnPrompt();
             String destination;
             
@@ -160,37 +166,33 @@ public class GameSystem{
                   
                   
             }
-            else if (answer ==2){ // rehearse
+            else if (answer == 2){ // rehearse
                   System.out.println("Rehearsing... currentPlay.rehearse() called.");
                   currentPlay.rehearse();
             }
-            else if (answer ==3){ // move
+            else if (answer == 3){ // move
                   
-                  // display adjacent rooms
-                  System.out.println("Where would you like to move to?");
-                        destination= sc.next().toLowerCase();
-                        
-                  System.out.println("moving you to " + destination + "...");
-                  Room room = Room.stringToRoom(destination);
+                  
+                  Room room= roomPrompt();   // get destination
+                   
+                  System.out.println("moving you to " + room.roomName + "...");
+
                   currentPlay.move(room);
                       
-                        // if destination is in currentPlayer.location.adjacentRooms()            
+                              
             }
-            else if (answer ==4){ // pass 
+            else if (answer == 4){ // pass 
                   
                   // new currentPlay
                   // new nextPlay
                   System.out.println(currentPlay.playerName + " passed, so...");
-                  nextPlayer();
-                  System.out.print("it's "+ currentPlay.playerName +"'s turn!");
             }
             else{
                   System.out.println("There was an error with your input, let's try again.....");
                   
                   turn();
-                }      
-            nextPlayer(); // new currentPlay, nextPlay   
-            turn();   
+                }
+            
       }
       
 //••••••••••••••••••••••••••••••••••••• NEXT PLAYER ••••••••••••••••••••••••••••••••••••
@@ -207,6 +209,36 @@ public class GameSystem{
                   nextPlay= players.get(nextIndex);     
       }
       
+   //••••••••••••••••••••••••••••••••••••• RoomPrompt ••••••••••••••••••••••••••••••••••••
+      private static Room roomPrompt(){
+      
+            Scanner sc= new Scanner(System.in);
+            Room room= null;
+            boolean validMove= false;
+                
+            while (validMove== false){
+                  
+                        // display adjacent rooms
+
+                  System.out.println("These are your choices: \n");
+                  System.out.println(currentPlay.location.getMoves());
+                  
+                        // get destination
+                  System.out.println("Where would you like to move to? \n");
+                  String destination = sc.nextLine().toLowerCase();
+                  room= Room.stringToRoom(destination);
+                        
+                        if (room== null ){ // ***** OR NOT AN ADJACENT ROOM ***
+                          System.out.println("You cannot move to "+ destination+ ". Let's try again.") ; 
+                          return roomPrompt();
+                          }
+                        else
+                              validMove= true;      
+                  
+             } 
+             return room;
+    }                
+
   //••••••••••••••••••••••••••••••••••••• TurnPrompt ••••••••••••••••••••••••••••••••••••
 
       // prompts user for turn input
@@ -249,10 +281,62 @@ public class GameSystem{
                   return ans;
                   
       }
+      
+  //••••••••••••••••••••••••••••••••••••• ENDDAY ••••••••••••••••••••••••••••••••••••
+  // various end of day necessities
+  
+      private static void endDay(){
+      
+            //SceneCardManager.deal(); // deal 10 new Scenes            **********
+           
+            
+            for(Player player: players)  // move players back to trailers
+
+                  player.move(Room.stringToRoom("Trailers"));
+            
+            nextPlayer(); // iterate players
+            
+
+      }  
   //••••••••••••••••••••••••••••••••••••• ENDGAME ••••••••••••••••••••••••••••••••••••
 
       // Total up score, annouce winner, prompt to restart
       private static void endGame(){
+            
+            int[] scores= new int[5];
+            String winner= "";
+            int max=0;
+            int score= 0;
+            Scanner sc= new Scanner(System.in);
+            
+            System.out.println("Here are your scores: \n");
+            for(Player player: players){
+                
+                score= player.getScore();
+                System.out.println(player.playerName+ ": "+ score +" points")  ;
+                scores[(players.indexOf(player))]= score;
+                
+                if(score == max){
+                  
+                  winner= winner + ", "+ player.playerName;
+                }
+                else if (player.getScore() > max ){
+                  
+                  max= player.getScore();
+                  winner= player.playerName; 
+                       
+                }  
+            }
+            
+            System.out.println(winner + " won the game!");
+            
+            System.out.println("Would you like to play again? ( yes/no )");
+            
+                  String newGame= sc.next();
+                  
+                  if(newGame.toLowerCase().equals("yes"))
+                        
+                        initialize(players.size());      
 
       }
       

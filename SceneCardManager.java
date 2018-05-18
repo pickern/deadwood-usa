@@ -94,7 +94,7 @@ public class SceneCardManager {
 
   // To ensure that cards are random every time the game is played
   public void shuffle(){
-
+            //chris 
   }
 
   // Removes scene card from play when scene is wrapped

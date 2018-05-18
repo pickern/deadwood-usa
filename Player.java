@@ -134,7 +134,7 @@ public class Player{
     }
   }
 
-  // Move
+  // Move                     
   public void move(Room destination){
     if(location != null){
       location.exit(this) ;
@@ -180,7 +180,7 @@ public class Player{
 
   // Upgrade (unsure about best way to implement)
   public void upgrade(int rankChange, int cost){
-
+      // chris
   }
 
 }

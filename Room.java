@@ -164,15 +164,17 @@ public class Room{
     return sb.toString() ;
   }
 
-  // Returns a Room given String with roomName
+  // Returns a Room given String with roomName ** fixed compatability with lower case*
   public static Room stringToRoom(String name){
-    if(name.equals("Trailers")){
+      name= name.toLowerCase();
+      
+    if(name.equals("trailers")){
       return Room.trailers ;
-    } else if(name.equals("Casting Office")){
+    } else if(name.equals("casting office")){
       return Room.office ;
     } else {
       for(Room room: sets){
-        if(room.roomName.equals(name)){
+        if(room.roomName.toLowerCase().equals(name)){
           return room ;
         }
       }
