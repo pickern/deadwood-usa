@@ -38,7 +38,7 @@ public class Room{
   static Room trailers ; // Special rooms
   static Room office ;
   static int[][] upgradeTable ; //upgradeTable[][0] is money cost, [][1] is fame cost
-  static ArrayDeque<Room> sets = new ArrayDeque(); // For rooms with sceneCards
+  static ArrayDeque<Room> sets = new ArrayDeque<Room>(); // For rooms with sceneCards
 
   ///* Main method for testing
   public static void main(String[] args){
@@ -62,7 +62,7 @@ public class Room{
       sets.add(this) ;
     }
 
-    playersInRoom = new ArrayDeque() ;
+    playersInRoom = new ArrayDeque<Player>() ;
   }
 
   // Reads in info from board.xml
@@ -261,7 +261,7 @@ public class Room{
 
     // Pay wrap bonuses
     if(onCard){
-      PriorityQueue<Integer> dice = new PriorityQueue(Collections.reverseOrder()) ;
+      PriorityQueue<Integer> dice = new PriorityQueue<Integer>(Collections.reverseOrder()) ;
       for(int i = 0; i < currentScene.budget; i++){ // roll dice
         dice.offer(rand.nextInt(6)) ;
       }
