@@ -37,6 +37,7 @@ public class Room{
   private ArrayDeque<Player> playersInRoom ;
   static Room trailers ; // Special rooms
   static Room office ;
+  static int[][] upgradeTable ; //upgradeTable[][0] is money cost, [][1] is fame cost
   static ArrayDeque<Room> sets = new ArrayDeque(); // For rooms with sceneCards
 
   ///* Main method for testing
@@ -130,6 +131,17 @@ public class Room{
       Room.trailers = new Room("Trailers", -1, tadjacentRooms, null) ;
       Room.office = new Room("Casting Office", -1, oadjacentRooms, null) ;
 
+      // Create upgrade table
+      upgradeTable = new int[5][2] ;
+      for(int i = 0; i < 5; i++){
+        if(i == 0){
+          upgradeTable[i][0] = 4;
+        } else{
+          upgradeTable[i][0] = upgradeTable[i-1][0] + 2*(i+2) ;
+        }
+        upgradeTable[i][1] = 5 * i ;
+      }
+
     }catch(Exception e){
       e.printStackTrace() ;
     }
@@ -150,6 +162,10 @@ public class Room{
         sb.append("\n" + extraRoles[i].name) ;
       }
     }
+    if(currentScene.flipped){
+      sb.append(currentScene.toString());
+    }
+
     return sb.toString() ;
   }
 
@@ -191,6 +207,9 @@ public class Room{
   // Player enters
   public void enter(Player player){
     playersInRoom.add(player) ;
+    if(currentScene != null && !currentScene.flipped){
+      currentScene.flipped = true ;
+    }
   }
 
   // Assigns a new scene
