@@ -195,7 +195,7 @@ public class Player{
 
   // Upgrade (unsure about best way to implement)
   public void upgrade(int rankChange, int cost){
-      // chris
+      //chris
   }
 
 }
