@@ -19,7 +19,7 @@ public class Player{
   private int money ;
   private int fame ;
   private int rank ;
-  private int rehearsalBonus ;
+  public int rehearsalBonus ;
   public boolean working = false ; // everyone starts not working
   public Room location ;
   public String playerName ;
@@ -44,7 +44,7 @@ public class Player{
   // Returns player's information in a String
   public String playerInfo(){
     int score = getScore();
-    
+
     if(working == false){
     String ans = (playerName + "\n" +
               "Money: $" + money + "\n" +
@@ -54,11 +54,11 @@ public class Player{
               "Location: " + location.roomName + "\n"+
               "Current Role: not working \n"+
               "Rehearsal Bonus: " +rehearsalBonus
-              
+
     ) ;
 
     return ans;
-    
+
     }
     else{
     String ans = (playerName + "\n" +
@@ -69,13 +69,13 @@ public class Player{
               "Location: " + location.roomName + "\n"+
               "Current Role: "+ role.name+ "\n"+
               "Rehearsal Bonus: " + rehearsalBonus
-              
+
     ) ;
 
     return ans;
-    
+
     }
-    
+
   }
 
   // Alternate constructor
@@ -158,13 +158,13 @@ public class Player{
     if(location != null){
       location.exit(this) ;
     }
-    
+
     if(destination.equals(Room.office)){
       location= destination;
       location.enter(this);
       GameSystem.upgrade();
-    } 
-      
+    }
+
     location = destination ;
     location.enter(this) ;
   }
@@ -191,12 +191,12 @@ public class Player{
   // Work on Role
   public void workOnRole(){
       boolean onCard = true;     // true if on card Role, false if off card Role
-      
+
       //print "Line"
-      
+
       System.out.println(role.line);
-      
-      
+
+
       for(Role role: location.extraRoles){
         if(this.role.equals(role)){
           onCard = false ;
@@ -219,7 +219,7 @@ public class Player{
         }
         location.advanceScene() ;
         System.out.println("Good job! You finished the shot. You have "+ location.shotsRemaining+ " remaining. \n");
-        
+
       } else if(!onCard){
         changeMoney(1) ;
         System.out.println("Better luck next time... You didn't finish the shot.\n");
@@ -234,6 +234,6 @@ public class Player{
   }
 
 
-  
+
 
 }
