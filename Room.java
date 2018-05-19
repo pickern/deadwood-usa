@@ -225,7 +225,7 @@ public class Room{
     // Add off card roles
     sb.append("Off-card Roles:\n ") ;
     for(Role role: extraRoles){
-      if(!role.taken){
+      if(!role.taken && GameSystem.currentPlay.getRank() >= role.reqRank){
         sb.append(role.name + " (rank " + role.reqRank + ")\n" ) ;
       }
     }
@@ -233,7 +233,7 @@ public class Room{
     // Add on card roles
     sb.append("\nOn-card Roles:\n ") ;
     for(Role role: currentScene.roles){
-      if(!role.taken){
+      if(!role.taken && GameSystem.currentPlay.getRank() >= role.reqRank){
         sb.append(role.name + " (rank " + role.reqRank + ")\n" ) ;
       }
     }

@@ -247,11 +247,11 @@ public class GameSystem{
             // list possible roles (FIX) ****
             System.out.println("Which role would you like to choose?");
 
-                  role= sc.nextLine().toLowerCase();
+                  //role = sc.nextLine().toLowerCase();
 
-            if(){ // change to in list of possible roles
-                  validInput= true;
-                  return;
+            if(true){ // change to in list of possible roles
+              validInput= true;
+             return;
             }
 
             else{
@@ -341,7 +341,7 @@ public class GameSystem{
 
       private static void endDay(){
 
-            //SceneCardManager.deal(); // deal 10 new Scenes            **********        (FIX)
+            SceneCardManager.deal(); // deal 10 new Scenes            **********        (FIX)
             for(Player player: players)  // move players back to trailers
 
                   player.move(Room.stringToRoom("Trailers"));
