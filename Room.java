@@ -253,6 +253,7 @@ public class Room{
   private void wrapScene(){
     // Check to see if wrap bonuses need to be paid
     boolean onCard = false ;
+    shotsRemaining = shotMarkers ;
     for(Role role: currentScene.roles){
       if(role.taken){
         onCard = true ;
@@ -288,6 +289,7 @@ public class Room{
     for(Player player: playersInRoom){
       if(player.working){
         player.working = false ;
+        player.rehearsalBonus = 0 ;
       }
     }
   }
