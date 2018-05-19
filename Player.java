@@ -190,8 +190,9 @@ public class Player{
 
   // Work on Role
   public void workOnRole(){
-      boolean onCard = true;     // true if on card Role, false if off card Role
 
+      boolean onCard = true;     // true if on card Role, false ihf off card Role
+      
       //print "Line"
 
       System.out.println(role.line);
@@ -218,8 +219,13 @@ public class Player{
           changeMoney(1) ;
         }
         location.advanceScene() ;
+<<<<<<< HEAD
         System.out.println("Good job! You finished the shot. You have "+ location.shotsRemaining+ " remaining. \n");
 
+=======
+        System.out.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
+
+>>>>>>> 476468314b7f89a7323ff5bc169ff4582834fd9b
       } else if(!onCard){
         changeMoney(1) ;
         System.out.println("Better luck next time... You didn't finish the shot.\n");
