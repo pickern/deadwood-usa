@@ -19,7 +19,7 @@ public class Player{
   private int money ;
   private int fame ;
   private int rank ;
-  private int rehearsalBonus ;
+  public int rehearsalBonus ;
   public boolean working = false ; // everyone starts not working
   public Room location ;
   public String playerName ;
@@ -190,7 +190,7 @@ public class Player{
 
   // Work on Role
   public void workOnRole(){
-      boolean onCard = true;     // true if on card Role, false if off card Role
+      boolean onCard = true;     // true if on card Role, false ihf off card Role
       
       //print "Line"
       
@@ -218,7 +218,7 @@ public class Player{
           changeMoney(1) ;
         }
         location.advanceScene() ;
-        System.out.println("Good job! You finished the shot. You have "+ location.shotsRemaining+ " remaining. \n");
+        System.out.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
         
       } else if(!onCard){
         changeMoney(1) ;
