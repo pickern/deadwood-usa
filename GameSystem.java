@@ -93,9 +93,12 @@ public class GameSystem{
         Random rand = new Random() ;
         currentPlay = players.get(rand.nextInt(playerCount)) ;
         int nextIndex= players.indexOf(currentPlay)+1;
+
+            
+        if (nextIndex == players.size())
         
-        if (nextIndex > players.size())
-                  nextIndex= nextIndex- players.size();
+                  nextIndex= 0;
+                  
         nextPlay= players.get(nextIndex);// initialization of nextPlay
 
         System.out.println("\n" + currentPlay.playerName + " will be up first. Good luck! \n \n \n") ;
@@ -158,7 +161,7 @@ public class GameSystem{
             
             int answer= turnPrompt();
             String destination;
-            
+            Role chosenRole;
             
             if(answer == 1){ // act
                   System.out.println("Acting... currentPlay.workOnRole() called.");
@@ -180,7 +183,12 @@ public class GameSystem{
                   currentPlay.move(room);
                   
                   if(currentPlay.working == false){
-                        rolePrompt(room);
+                        chosenRole= rolePrompt(room);
+                        
+                        if(chosenRole != null){
+                              currentPlay.takeRole(chosenRole);
+                        }
+                       
                    }   
                               
             }
@@ -213,21 +221,24 @@ public class GameSystem{
       }
    //••••••••••••••••••••••••••••••••••••• RolePrompt ••••••••••••••••••••••••••••••••••••
    
-   private static void rolePrompt(Room room){
+   private static Role rolePrompt(Room currentRoom){
    
       Scanner sc= new Scanner(System.in);
       boolean validInput= false;
+      Role answer= null;
+      String role;
+      
       
       while(validInput == false){
       
-      System.out.println("Would you like to pick one of the roles in "+ room.roomName+ "?");
+      System.out.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "?");
       // list possible roles (FIX) ****
             
-            String role= sc.next().toLowerCase();
+             role = sc.next().toLowerCase();
             
             if(role.equals("no")){
                   validInput= true;
-                  return;
+                  return answer;
             }
             else if (role.equals("yes")){
                   validInput= true;
@@ -239,28 +250,48 @@ public class GameSystem{
       
       validInput= false;
       
-      while( validInput== false){ // only enters here if "yes", else loops or returns before this point
+      while( validInput == false){ // only enters here if "yes", else loops or returns before this point
             
             
             
-            // list possible roles (FIX) ****
+            // list available roles
+            System.out.println(currentRoom.showAvailableRoles(currentPlay.getRank()));
             System.out.println("Which role would you like to choose?");   
             
-                  role= sc.nextLine().toLowerCase();
+                  role = sc.nextLine().toLowerCase();
                   
-            if(){ // change to in list of possible roles
-                  validInput= true;
-                  return;
+            for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
+                  
+                  if(role.equals(offCardRole)){ // change to element of [list of possible roles]
+                        answer = offCardRole;
+                        validInput= true;
+                  }
+            }
+            for(Role onCardRole : currentRoom.currentScene.roles){ // on card roles for current scene
+                  
+                  if(role.equals(onCardRole)){
+                        answer= onCardRole;
+                        validInput= true;
+                  }
+            
             }
             
+            if (validInput == true){
+                  
+                  return answer;
+            
+            }
             else{
                   System.out.println("Improper input: please choose a role from the list... \n Let's try again...");
+            
             }         
             
       
       
       
       }
+      
+      return answer;
    }
    
    //••••••••••••••••••••••••••••••••••••• RoomPrompt ••••••••••••••••••••••••••••••••••••

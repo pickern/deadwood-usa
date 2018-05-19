@@ -170,7 +170,7 @@ public class Player{
       // roll
       // compare (roll+ currPlay rehearsal bonus) to (currentPlay.location.currentScene.budget)
       // for (roles in room)
-            //    if(role.taken== true && role
+            //    if(role.taken== true && role 
             
             
       // player.role is in Room.extraRoles() then offcard 
@@ -195,7 +195,7 @@ public class Player{
 
   // Upgrade (unsure about best way to implement)
   public void upgrade(int rankChange, int cost){
-      // chris
+      //chris
   }
 
 }
