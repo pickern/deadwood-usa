@@ -162,14 +162,29 @@ public class Player{
 
   // Work on Role
   public void workOnRole(){
+            
+       boolean onCard;     // true if on card Role, false if off card Role
+            
+      
       
       // roll
-      // compare (roll+ currPlay rehearsal bonus) to (budget)
+      // compare (roll+ currPlay rehearsal bonus) to (currentPlay.location.currentScene.budget)
+      // for (roles in room)
+            //    if(role.taken== true && role
+            
+            
+      // player.role is in Room.extraRoles() then offcard 
+      // player.role is in Room.currentScene.roles
+      
             // if > budget && currPlay is on card --> 2 fame pts
             // if > budget && currPlay is off card --> $1+ 1 fame pt
             // if < budget && currPlay is on card --> 0
             // if < budget && currPlay is off card --> $1
-      // if shotMarkers face up == 0 --> end Room.shotMarkers == 0
+            
+            
+      // if shotMarkers face up == 0 --> end Room.shotsRemaining == 0
+      
+            //currentPlay.location.wrapScene()
 
   }
 

@@ -35,7 +35,7 @@ public class GameSystem{
 //             test.currentPlay= new Player ("Chris");
 //             test.turn();
 
-            initialize(3);
+            initialize(3);          // for testing (FIX)
       }
 
       // constructor
@@ -132,13 +132,13 @@ public class GameSystem{
                   //if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
                                                               // there will be only one scene card left
                   
-                  if( count == 4){// ten loops for testing
+                  if( count == 4){// ten loops for testing (FIX)
                         endDay();
                         endDay= true;
                    }                            
                         
             }
-            if (currentDay == 1) // finished the last day
+            if (currentDay == 1) // finished the last day   (FIX) (currentDay== days)
                   endGame();
             else{
             currentDay++; // increment currentDay
@@ -178,7 +178,10 @@ public class GameSystem{
                   System.out.println("moving you to " + room.roomName + "...");
 
                   currentPlay.move(room);
-                      
+                  
+                  if(currentPlay.working == false){
+                        rolePrompt(room);
+                   }   
                               
             }
             else if (answer == 4){ // pass 
@@ -208,7 +211,58 @@ public class GameSystem{
                   currentPlay= nextPlay;
                   nextPlay= players.get(nextIndex);     
       }
+   //••••••••••••••••••••••••••••••••••••• RolePrompt ••••••••••••••••••••••••••••••••••••
+   
+   private static void rolePrompt(Room room){
+   
+      Scanner sc= new Scanner(System.in);
+      boolean validInput= false;
       
+      while(validInput == false){
+      
+      System.out.println("Would you like to pick one of the roles in "+ room.roomName+ "?");
+      // list possible roles (FIX) ****
+            
+            String role= sc.next().toLowerCase();
+            
+            if(role.equals("no")){
+                  validInput= true;
+                  return;
+            }
+            else if (role.equals("yes")){
+                  validInput= true;
+            }
+            else{
+                  System.out.println("Improper input: please choose yes or no... \n Let's try again...");
+            }
+      }
+      
+      validInput= false;
+      
+      while( validInput== false){ // only enters here if "yes", else loops or returns before this point
+            
+            
+            
+            // list possible roles (FIX) ****
+            System.out.println("Which role would you like to choose?");   
+            
+                  role= sc.nextLine().toLowerCase();
+                  
+            if(){ // change to in list of possible roles
+                  validInput= true;
+                  return;
+            }
+            
+            else{
+                  System.out.println("Improper input: please choose a role from the list... \n Let's try again...");
+            }         
+            
+      
+      
+      
+      }
+   }
+   
    //••••••••••••••••••••••••••••••••••••• RoomPrompt ••••••••••••••••••••••••••••••••••••
       private static Room roomPrompt(){
       
@@ -228,7 +282,7 @@ public class GameSystem{
                   String destination = sc.nextLine().toLowerCase();
                   room= Room.stringToRoom(destination);
                         
-                        if (room== null ){ // ***** OR NOT AN ADJACENT ROOM ***
+                        if (room== null ){ // ***** OR NOT AN ADJACENT ROOM *** (FIX)
                           System.out.println("You cannot move to "+ destination+ ". Let's try again.") ; 
                           return roomPrompt();
                           }
@@ -287,7 +341,7 @@ public class GameSystem{
   
       private static void endDay(){
       
-            //SceneCardManager.deal(); // deal 10 new Scenes            **********
+            //SceneCardManager.deal(); // deal 10 new Scenes            **********        (FIX)
            
             
             for(Player player: players)  // move players back to trailers
