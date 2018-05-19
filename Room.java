@@ -283,6 +283,14 @@ public class Room{
       }
     }
     SceneCardManager.discard(currentScene) ;
+
+    // Set players to not working
+    for(Player player: playersInRoom){
+      if(player.working){
+        player.working = false ;
+      }
+    }
   }
+
 
 }
