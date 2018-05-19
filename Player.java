@@ -143,6 +143,8 @@ public class Player{
   public void takeRole(Role newRole){
     working = true ;
     role = newRole ;
+    newRole.taken = true ;
+    newRole.workingPlayer = this ;
   }
 
   // Leave role, for when a scene wraps
