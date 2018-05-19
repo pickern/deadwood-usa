@@ -37,7 +37,8 @@ public class Room{
   private ArrayDeque<Player> playersInRoom ;
   static Room trailers ; // Special rooms
   static Room office ;
-  static ArrayDeque<Room> sets = new ArrayDeque(); // For rooms with sceneCards
+  static int[][] upgradeTable ; //upgradeTable[][0] is money cost, [][1] is fame cost
+  static ArrayDeque<Room> sets = new ArrayDeque<Room>(); // For rooms with sceneCards
 
   ///* Main method for testing
   public static void main(String[] args){
@@ -61,7 +62,7 @@ public class Room{
       sets.add(this) ;
     }
 
-    playersInRoom = new ArrayDeque() ;
+    playersInRoom = new ArrayDeque<Player>() ;
   }
 
   // Reads in info from board.xml
@@ -130,6 +131,17 @@ public class Room{
       Room.trailers = new Room("Trailers", -1, tadjacentRooms, null) ;
       Room.office = new Room("Casting Office", -1, oadjacentRooms, null) ;
 
+      // Create upgrade table
+      upgradeTable = new int[5][2] ;
+      for(int i = 0; i < 5; i++){
+        if(i == 0){
+          upgradeTable[i][0] = 4;
+        } else{
+          upgradeTable[i][0] = upgradeTable[i-1][0] + 2*(i+2) ;
+        }
+        upgradeTable[i][1] = 5 * i ;
+      }
+
     }catch(Exception e){
       e.printStackTrace() ;
     }
@@ -150,6 +162,10 @@ public class Room{
         sb.append("\n" + extraRoles[i].name) ;
       }
     }
+    if(currentScene.flipped){
+      sb.append(currentScene.toString());
+    }
+
     return sb.toString() ;
   }
 
@@ -167,7 +183,7 @@ public class Room{
   // Returns a Room given String with roomName ** fixed compatability with lower case*
   public static Room stringToRoom(String name){
       name= name.toLowerCase();
-      
+
     if(name.equals("trailers")){
       return Room.trailers ;
     } else if(name.equals("casting office")){
@@ -191,6 +207,9 @@ public class Room{
   // Player enters
   public void enter(Player player){
     playersInRoom.add(player) ;
+    if(currentScene != null && !currentScene.flipped){
+      currentScene.flipped = true ;
+    }
   }
 
   // Assigns a new scene
@@ -206,7 +225,7 @@ public class Room{
     // Add off card roles
     sb.append("Off-card Roles:\n ") ;
     for(Role role: extraRoles){
-      if(!role.taken){
+      if(!role.taken && GameSystem.currentPlay.getRank() >= role.reqRank){
         sb.append(role.name + " (rank " + role.reqRank + ")\n" ) ;
       }
     }
@@ -214,7 +233,7 @@ public class Room{
     // Add on card roles
     sb.append("\nOn-card Roles:\n ") ;
     for(Role role: currentScene.roles){
-      if(!role.taken){
+      if(!role.taken && GameSystem.currentPlay.getRank() >= role.reqRank){
         sb.append(role.name + " (rank " + role.reqRank + ")\n" ) ;
       }
     }
@@ -242,7 +261,7 @@ public class Room{
 
     // Pay wrap bonuses
     if(onCard){
-      PriorityQueue<Integer> dice = new PriorityQueue(Collections.reverseOrder()) ;
+      PriorityQueue<Integer> dice = new PriorityQueue<Integer>(Collections.reverseOrder()) ;
       for(int i = 0; i < currentScene.budget; i++){ // roll dice
         dice.offer(rand.nextInt(6)) ;
       }
@@ -264,6 +283,14 @@ public class Room{
       }
     }
     SceneCardManager.discard(currentScene) ;
+
+    // Set players to not working
+    for(Player player: playersInRoom){
+      if(player.working){
+        player.working = false ;
+      }
+    }
   }
+
 
 }

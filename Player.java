@@ -27,17 +27,15 @@ public class Player{
 
   ///* Main method for testing
   public static void main(String[] args){
-    Player thisplayer = new Player("Geroge") ;
-    thisplayer.changeRank(3) ;
-    thisplayer.changeMoney(4) ;
-    thisplayer.changeFame(10) ;
-    //System.out.println(thisplayer.playerInfo()) ;
+
   }
   //*/
 
   // Default constructor
   public Player(){
     PLAYER_COUNT ++ ;
+    playerName = "Player " + PLAYER_COUNT ;
+    rank = 1 ;
     this.playerName = "Player " + PLAYER_COUNT ;
     this.rank = 1 ;
 
@@ -45,17 +43,37 @@ public class Player{
 
   // Returns player's information in a String
   public String playerInfo(){
-  
-    int score= getScore();
-    String ans= (playerName + "\n" +
+    int score = getScore();
+    
+    if(working == false){
+    String ans = (playerName + "\n" +
               "Money: $" + money + "\n" +
               "Fame: " + fame + "\n" +
               "Rank: " + rank + "\n" +
               "Score: " + score + "\n" +
-              "Location: " + location.roomName + "\n"
+              "Location: " + location.roomName + "\n"+
+              "Current Role: not working \n"
+              
     ) ;
-    
+
     return ans;
+    
+    }
+    else{
+    String ans = (playerName + "\n" +
+              "Money: $" + money + "\n" +
+              "Fame: " + fame + "\n" +
+              "Rank: " + rank + "\n" +
+              "Score: " + score + "\n" +
+              "Location: " + location.roomName + "\n"+
+              "Current Role: "+ role.name+ "\n"
+              
+    ) ;
+
+    return ans;
+    
+    }
+    
   }
 
   // Alternate constructor
@@ -111,8 +129,7 @@ public class Player{
   }
 
   public int getScore(){
-    int ans= fame + money + 5 * rank ;
-    return ans;
+    return fame + money + 5 * rank ;
   }
 
   public int getRehearsalBonus(){
@@ -134,7 +151,7 @@ public class Player{
     }
   }
 
-  // Move                     
+  // Move
   public void move(Room destination){
     if(location != null){
       location.exit(this) ;
@@ -162,29 +179,31 @@ public class Player{
 
   // Work on Role
   public void workOnRole(){
-            
-       boolean onCard;     // true if on card Role, false if off card Role
-            
-      
-      
-      // roll
+      boolean onCard = true;     // true if on card Role, false if off card Role
+      for(Role role: location.extraRoles){
+        if(this.role.equals(role)){
+          onCard = false ;
+        }
+      }
+
+
+      int roll = rand.nextInt(6) + 1 ;
       // compare (roll+ currPlay rehearsal bonus) to (currentPlay.location.currentScene.budget)
       // for (roles in room)
-            //    if(role.taken== true && role 
-            
-            
-      // player.role is in Room.extraRoles() then offcard 
-      // player.role is in Room.currentScene.roles
-      
-            // if > budget && currPlay is on card --> 2 fame pts
-            // if > budget && currPlay is off card --> $1+ 1 fame pt
-            // if < budget && currPlay is on card --> 0
-            // if < budget && currPlay is off card --> $1
-            
-            
-      // if shotMarkers face up == 0 --> end Room.shotsRemaining == 0
-      
-            //currentPlay.location.wrapScene()
+
+            //    if(role.taken== true && role
+
+      if(roll + rehearsalBonus > location.currentScene.budget){
+        if(onCard){
+          changeFame(2) ;
+        }else{
+          changeFame(1) ;
+          changeMoney(1) ;
+        }
+        location.advanceScene() ;
+      } else if(!onCard){
+        changeMoney(1) ;
+      }
 
   }
 
@@ -192,6 +211,7 @@ public class Player{
   public void rehearse(){
     rehearsalBonus++ ;
   }
+
 
   // Upgrade (unsure about best way to implement)
   public void upgrade(int rankChange, int cost){

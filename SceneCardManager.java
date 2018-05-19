@@ -79,10 +79,11 @@ public class SceneCardManager {
   }
 
   // Assigns scene cards to rooms
-  public void deal(){
+  public static void deal(){
     for(Room room: Room.sets){
       // Sweep up any remaining scenes
-      if(!discardPile.contains(room.currentScene)){
+      if(!discardPile.contains(room.currentScene) && room.currentScene != null){
+            
         discard(room.currentScene) ;
       }
 
@@ -93,8 +94,8 @@ public class SceneCardManager {
   }
 
   // To ensure that cards are random every time the game is played
-  public void shuffle(){
-            //chris 
+  public static void shuffle(){
+
   }
 
   // Removes scene card from play when scene is wrapped
@@ -102,6 +103,7 @@ public class SceneCardManager {
     discardPile.add(card) ;
     activeScenes.remove(card) ;
   }
+
 
   // Returns number of scenes in play
   public int activeScenes(){
