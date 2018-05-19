@@ -44,15 +44,38 @@ public class Player{
   // Returns player's information in a String
   public String playerInfo(){
     int score = getScore();
+    
+    if(working == false){
     String ans = (playerName + "\n" +
               "Money: $" + money + "\n" +
               "Fame: " + fame + "\n" +
               "Rank: " + rank + "\n" +
               "Score: " + score + "\n" +
-              "Location: " + location.roomName + "\n"
+              "Location: " + location.roomName + "\n"+
+              "Current Role: not working \n"+
+              "Rehearsal Bonus: " +rehearsalBonus
+              
     ) ;
 
     return ans;
+    
+    }
+    else{
+    String ans = (playerName + "\n" +
+              "Money: $" + money + "\n" +
+              "Fame: " + fame + "\n" +
+              "Rank: " + rank + "\n" +
+              "Score: " + score + "\n" +
+              "Location: " + location.roomName + "\n"+
+              "Current Role: "+ role.name+ "\n"+
+              "Rehearsal Bonus: " + rehearsalBonus
+              
+    ) ;
+
+    return ans;
+    
+    }
+    
   }
 
   // Alternate constructor
@@ -135,6 +158,13 @@ public class Player{
     if(location != null){
       location.exit(this) ;
     }
+    
+    if(destination.equals(Room.office)){
+      location= destination;
+      location.enter(this);
+      GameSystem.upgrade();
+    } 
+      
     location = destination ;
     location.enter(this) ;
   }
@@ -161,6 +191,12 @@ public class Player{
   // Work on Role
   public void workOnRole(){
       boolean onCard = true;     // true if on card Role, false if off card Role
+      
+      //print "Line"
+      
+      System.out.println(role.line);
+      
+      
       for(Role role: location.extraRoles){
         if(this.role.equals(role)){
           onCard = false ;
@@ -171,6 +207,7 @@ public class Player{
       int roll = rand.nextInt(6) + 1 ;
       // compare (roll+ currPlay rehearsal bonus) to (currentPlay.location.currentScene.budget)
       // for (roles in room)
+
             //    if(role.taken== true && role
 
       if(roll + rehearsalBonus > location.currentScene.budget){
@@ -181,9 +218,13 @@ public class Player{
           changeMoney(1) ;
         }
         location.advanceScene() ;
+        System.out.println("Good job! You finished the shot. You have "+ location.shotsRemaining+ " remaining. \n");
+        
       } else if(!onCard){
         changeMoney(1) ;
+        System.out.println("Better luck next time... You didn't finish the shot.\n");
       }
+      else{System.out.println("Better luck next time... You didn't finish the shot.\n");}
 
   }
 
@@ -193,9 +234,6 @@ public class Player{
   }
 
 
-  // Upgrade (unsure about best way to implement)
-  public void upgrade(int rankChange, int cost){
-      //chris
-  }
+  
 
 }

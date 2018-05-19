@@ -82,7 +82,8 @@ public class SceneCardManager {
   public static void deal(){
     for(Room room: Room.sets){
       // Sweep up any remaining scenes
-      if(!discardPile.contains(room.currentScene)){
+      if(!discardPile.contains(room.currentScene) && room.currentScene != null){
+            
         discard(room.currentScene) ;
       }
 
@@ -105,7 +106,7 @@ public class SceneCardManager {
 
 
   // Returns number of scenes in play
-  public int activeScenes(){
+  public static int activeScenes(){
     return activeScenes.size() ;
   }
 
