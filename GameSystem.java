@@ -94,11 +94,11 @@ public class GameSystem{
 
         int nextIndex= players.indexOf(currentPlay)+1;
 
-            
+
         if (nextIndex == players.size())
-        
+
                   nextIndex= 0;
-                  
+
         nextPlay= players.get(nextIndex);// initialization of nextPlay
 
         System.out.println("\n" + currentPlay.playerName + " will be up first. Good luck! \n \n \n") ;
@@ -119,7 +119,7 @@ public class GameSystem{
       // Handles days
       private static void day(){
             boolean endDay= false;
-            int count= 0; // for testing
+            //int count= 0; // for testing
 
 
             // display day
@@ -132,19 +132,14 @@ public class GameSystem{
 
                   turn();     // calls turn
                   nextPlayer();     // updates currentPlay/ nextPlay
-                  count++;
+                  //count++;
 
                   //check if day is over
-                  //if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
-                                                              // there will be only one scene card left
-
-                  if( count == 4){// ten loops for testing (FIX)
-                        endDay();
-                        endDay= true;
-                   }
+                  if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
+                        endDay();                                            // there will be only one scene card left
 
             }
-            if (currentDay == 1) // finished the last day   (FIX) (currentDay== days)
+            if (currentDay == days) // finished the last day   (FIX) (currentDay== days)
                   endGame();
             else{
             currentDay++; // increment currentDay
@@ -163,16 +158,16 @@ public class GameSystem{
 
             int answer= turnPrompt();
             String destination;
-            Role chosenRole;
-            
+            Role chosenRole= null;
+
             if(answer == 1){ // act
-                  System.out.println("Acting... currentPlay.workOnRole() called.");
+                  //System.out.println("Acting... currentPlay.workOnRole() called.");
                   currentPlay.workOnRole();
 
 
             }
             else if (answer == 2){ // rehearse
-                  System.out.println("Rehearsing... currentPlay.rehearse() called.");
+                  //System.out.println("Rehearsing... currentPlay.rehearse() called.");
                   currentPlay.rehearse();
             }
             else if (answer == 3){ // move
@@ -184,20 +179,26 @@ public class GameSystem{
 
                   currentPlay.move(room);
                   
-                  if(currentPlay.working == false){
-
-                        chosenRole= rolePrompt(room);
+                  
+                  
+                 
+                  if(currentPlay.working == false ){
+                        
+                        if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) ){
+                        
+                              chosenRole= rolePrompt(room);
                         
                         
-                        if(chosenRole != null){
+                              if(chosenRole != null)
                               currentPlay.takeRole(chosenRole);
                               
                         }
-                       
+                        else{
+                        
+                        System.out.println("No roles to choose from...");
+                        }
                    }   
                               
-                      
-
             }
             else if (answer == 4){ // pass
 
@@ -228,26 +229,27 @@ public class GameSystem{
       }
 
    //••••••••••••••••••••••••••••••••••••• RolePrompt ••••••••••••••••••••••••••••••••••••
-   
+
    private static Role rolePrompt(Room currentRoom){
-   
+
       Scanner sc= new Scanner(System.in);
       Scanner scb= new Scanner(System.in);
       boolean validInput= false;
       Role answer= null;
       String ans;
       String role;
-      
-      
+
+
       while(validInput == false){
-      
-      System.out.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "?");
+
+      System.out.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
       // list possible roles 
             
              ans = sc.next().toLowerCase();
             
 
             if(ans.equals("no")){
+
                   validInput= true;
                   return answer;
             }
@@ -275,6 +277,7 @@ public class GameSystem{
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
                   
                   if(role.equals(offCardRole.name.toLowerCase())){ // change to element of [list of possible roles]
+
                         answer = offCardRole;
                         validInput= true;
                         return answer;
@@ -283,26 +286,27 @@ public class GameSystem{
             for(Role onCardRole : currentRoom.currentScene.roles){ // on card roles for current scene
                   
                   if(role.equals(onCardRole.name.toLowerCase())){
+
                         answer= onCardRole;
                         validInput= true;
                         return answer;
                   }
-            
+
             }
-            
+
             if (validInput == true){
-                  
+
                   return answer;
-            
+
             }
             else{
                   System.out.println("Improper input: please choose a role from the list... \n Let's try again...");
             
             }         
             
-      
+
       }
-      
+
       return answer;
    }
 
@@ -358,7 +362,7 @@ public class GameSystem{
 
 
                   if (currentPlay.working== true){ // if working
-                   System.out.println("Would you like to act or rehearse?");
+                   System.out.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
                    String answer= sc.next();
 
                         if(answer.toLowerCase().equals("act")){
@@ -382,12 +386,62 @@ public class GameSystem{
                         }
 
                   } // end else
-
+                  
+                  if(ans== 0)
+                        
+                        System.out.println("Improper input: Let's try again...");      
                   } // end while
 
                   return ans;
 
       }
+  //••••••••••••••••••••••••••••••••••••• UPGRADE ••••••••••••••••••••••••••••••••••••
+     public static void upgrade(){
+     
+      Scanner sc= new Scanner(System.in);
+      boolean properInput= false; 
+      int rank=0;
+      String payment="";
+            
+            while(properInput== false){
+                  
+                  for(int i=0; i< 5; i++){
+                  // print table
+                  System.out.println("Rank: "+ (i+2) + " Money: $" +Room.upgradeTable[i][0] + " Fame: "+ Room.upgradeTable[i][1]);
+                  // ask for payment method, rank      
+                  System.out.println("Please type in rank then payment type.");
+                        rank = sc.nextInt();
+                        payment= sc.next().toLowerCase();      
+                  
+                  if( rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame")) ){
+                        properInput= true;
+                  }
+                  else{
+                       System.out.println("Improper input: please choose an appropriate rank and payment type.");
+                  }                        
+            
+            
+                  if(currentPlay.getFame() < Room.upgradeTable[rank-2][1] || currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
+                  
+                        System.out.println("Improper input: you cannpt afford this upgrade.");      
+                  }
+               }// end for
+                  
+            }// end while
+            
+            // validInput
+            
+            currentPlay.changeRank(rank);
+                  
+                  if(payment.equals("money"))
+                        currentPlay.changeMoney(-Room.upgradeTable[rank-2][0]);
+                  else
+                        currentPlay.changeFame(-Room.upgradeTable[rank-2][1]);
+                     
+     
+     
+     
+     }     
 
   //••••••••••••••••••••••••••••••••••••• ENDDAY ••••••••••••••••••••••••••••••••••••
   // various end of day necessities

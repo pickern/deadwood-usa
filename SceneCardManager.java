@@ -106,7 +106,7 @@ public class SceneCardManager {
 
 
   // Returns number of scenes in play
-  public int activeScenes(){
+  public static int activeScenes(){
     return activeScenes.size() ;
   }
 
