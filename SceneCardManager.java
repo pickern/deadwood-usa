@@ -79,7 +79,7 @@ public class SceneCardManager {
   }
 
   // Assigns scene cards to rooms
-  public void deal(){
+  public static void deal(){
     for(Room room: Room.sets){
       // Sweep up any remaining scenes
       if(!discardPile.contains(room.currentScene)){
@@ -93,7 +93,7 @@ public class SceneCardManager {
   }
 
   // To ensure that cards are random every time the game is played
-  public void shuffle(){
+  public static void shuffle(){
 
   }
 
