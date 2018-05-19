@@ -2,7 +2,7 @@ Deadwood Studios, USA
 A text-based implementation for CSCI 345, Assignment 2
 Nick Pickering and Chris Speckhardt, May 18th, 2018
 
-To play, compile and run GameSystem.java, providing an int argument with
+To play, compile and run GameSystem.java in the command line, providing a single int argument with
 desired number of players.
 
 Files:
