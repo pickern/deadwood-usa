@@ -128,8 +128,8 @@ public class Room{
         oadjacentRooms[i] = oneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
       }
 
-      Room.trailers = new Room("Trailers", -1, tadjacentRooms, null) ;
-      Room.office = new Room("Casting Office", -1, oadjacentRooms, null) ;
+      Room.trailers = new Room("trailers", -1, tadjacentRooms, null) ;
+      Room.office = new Room("office", -1, oadjacentRooms, null) ;
 
       // Create upgrade table
       upgradeTable = new int[5][2] ;
@@ -272,14 +272,14 @@ public class Room{
         int diceTemp = dice.poll() ;
         // Will loop through roles higest to lowest if ordered correctly
         if(currentScene.roles[i % currentScene.roles.length].taken){
-          //currentScene.roles[i % currentScene.roles.length].workingPlayer.changeMoney(diceTemp) ;
+          currentScene.roles[i % currentScene.roles.length].workingPlayer.changeMoney(diceTemp) ;
         }
       }
 
       // Pay off card actors
       for(Role role: extraRoles){
         if(role.taken){
-          //role.workingPlayer.changeMoney(role.reqRank) ;
+          role.workingPlayer.changeMoney(role.reqRank) ;
         }
       }
     }
