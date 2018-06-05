@@ -1,7 +1,4 @@
 // SceneCardManager class for Deadwood USA
-// TODO:
-//  - Shuffle
-//  - Test once SceneCard is running
 
 import java.util.ArrayDeque ;
 
@@ -47,6 +44,11 @@ public class SceneCardManager {
       String description;
       int budget;
       Role[] cardRoles;
+      String img ;
+      int x ;
+      int y ;
+      int w ;
+      int h ;
 
       // Role attributes
       String roleName;
@@ -59,6 +61,7 @@ public class SceneCardManager {
         number = Integer.parseInt(element.getElementsByTagName("scene").item(0).getAttributes().getNamedItem("number").getNodeValue()) ;
         description = element.getElementsByTagName("scene").item(0).getTextContent() ;
         budget = Integer.parseInt(cards.item(i).getAttributes().getNamedItem("budget").getNodeValue()) ;
+        img = cards.item(i).getAttributes().getNamedItem("img").getNodeValue() ;
 
         // roles
         NodeList roles = element.getElementsByTagName("part") ;
@@ -70,7 +73,8 @@ public class SceneCardManager {
           cardRoles[j] = new Role(roleName, line, reqRank) ;
         }
 
-        deck.add(new SceneCard(name, number, description, budget, cardRoles)) ;
+
+        deck.add(new SceneCard(name, number, description, budget, cardRoles, img)) ;
       }
 
     }catch(Exception e){
@@ -83,7 +87,7 @@ public class SceneCardManager {
     for(Room room: Room.sets){
       // Sweep up any remaining scenes
       if(!discardPile.contains(room.currentScene) && room.currentScene != null){
-            
+
         discard(room.currentScene) ;
       }
 

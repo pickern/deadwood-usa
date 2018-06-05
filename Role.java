@@ -6,6 +6,11 @@
 public class Role{
 
       // attributes
+      public int x ;
+      public int y ;
+      public int w ;
+      public int h ;
+      public String img ;
       public String name;
       public String line;
       public int reqRank;
@@ -18,6 +23,19 @@ public class Role{
             this.name= name;
             this.line= line;
             this.reqRank= requiredRank;
+
+      }
+
+      // Alternate constructor for GUI
+      public Role(String name, String line, int requiredRank, int x, int y, int w, int h){
+
+            this.name= name;
+            this.line= line;
+            this.reqRank= requiredRank;
+            this.x = x ;
+            this.y = y ;
+            this.h = h ;
+            this.w = w ;
 
       }
 

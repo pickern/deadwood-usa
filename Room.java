@@ -23,10 +23,13 @@ import org.w3c.dom.Element;
 
 import java.io.File;
 
-
 public class Room{
 
   // Attributes
+  public int x ;
+  public int y ;
+  public int w ;
+  public int h ;
   public String roomName ;
   public int shotMarkers ;
   static Random rand = new Random() ;
@@ -38,17 +41,12 @@ public class Room{
   static Room trailers ; // Special rooms
   static Room office ;
   static int[][] upgradeTable ; //upgradeTable[][0] is money cost, [][1] is fame cost
-  static ArrayDeque<Room> sets = new ArrayDeque<Room>(); // For rooms with sceneCards
+  static ArrayDeque<Room> sets = new ArrayDeque<Room>() ; // For rooms with sceneCards
 
   ///* Main method for testing
   public static void main(String[] args){
-    new Room("Trailers", 0, null, null) ;
-    new Room("Casting Office", 10, null, null) ;
-    new Room("The Barn", 10, null, null) ;
-    new Room("Barn 2: The Barnening", 10, null, null) ;
-    System.out.println(sets.size()) ;
-    System.out.println(sets.poll().roomName) ;
-    System.out.println(sets.poll().roomName) ;
+    readRooms() ;
+    System.out.println(sets.getFirst().toString());
   }//*/
 
   // Constructor
@@ -58,6 +56,20 @@ public class Room{
     shotsRemaining = shots ;
     adjacentRooms = adjacents ;
     extraRoles = roles ;
+    playersInRoom = new ArrayDeque<Player>() ;
+  }
+
+  // Alternate contructor for GUI
+  public Room(String name, int shots, String[] adjacents, Role[] roles, int x, int y, int w, int h){
+    roomName = name ;
+    shotMarkers = shots ;
+    shotsRemaining = shots ;
+    adjacentRooms = adjacents ;
+    extraRoles = roles ;
+    this.x = x ;
+    this.y = y ;
+    this.w = w ;
+    this.h = h ;
     if(!(name.equals("Casting Office") || name.equals("Trailers"))){
       sets.add(this) ;
     }
@@ -80,6 +92,10 @@ public class Room{
       int shots ;
       String[] adjacentRooms ;
       Role[] roomRoles ;
+      int x ;
+      int y ;
+      int w ;
+      int h ;
 
       // Role constructor parameters
       String roleName ;
@@ -111,8 +127,15 @@ public class Room{
           roomRoles[j] = new Role(roleName, line, reqRank) ;
         }
 
+        // Get GUI attributes
+        Node area = set.getElementsByTagName("area").item(0) ;
+        x = Integer.parseInt(area.getAttributes().getNamedItem("x").getNodeValue()) ;
+        y = Integer.parseInt(area.getAttributes().getNamedItem("y").getNodeValue()) ;
+        w = Integer.parseInt(area.getAttributes().getNamedItem("w").getNodeValue()) ;
+        h = Integer.parseInt(area.getAttributes().getNamedItem("h").getNodeValue()) ;
+
         // Add to sets
-        Room.sets.add(new Room(roomName, shots, adjacentRooms, roomRoles)) ;
+        Room.sets.add(new Room(roomName, shots, adjacentRooms, roomRoles, x, y, w, h)) ;
       }
 
       // Create trailers and casting office
@@ -128,8 +151,8 @@ public class Room{
         oadjacentRooms[i] = oneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
       }
 
-      Room.trailers = new Room("Trailers", -1, tadjacentRooms, null) ;
-      Room.office = new Room("Casting Office", -1, oadjacentRooms, null) ;
+      Room.trailers = new Room("trailer", -1, tadjacentRooms, null) ;
+      Room.office = new Room("office", -1, oadjacentRooms, null) ;
 
       // Create upgrade table
       upgradeTable = new int[5][2] ;
@@ -162,9 +185,10 @@ public class Room{
         sb.append("\n" + extraRoles[i].name) ;
       }
     }
-    if(currentScene.flipped){
+    if(currentScene != null && currentScene.flipped){
       sb.append(currentScene.toString());
     }
+    sb.append("\nx: " + x + "\ny: " + y ) ;
 
     return sb.toString() ;
   }

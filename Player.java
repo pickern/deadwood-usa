@@ -24,6 +24,8 @@ public class Player{
   public Room location ;
   public String playerName ;
   public Role role ;
+  public char color ;
+  static char[] colors = {'b','c','g','o','p','r','v','y'} ;
 
   ///* Main method for testing
   public static void main(String[] args){
@@ -38,6 +40,7 @@ public class Player{
     rank = 1 ;
     this.playerName = "Player " + PLAYER_COUNT ;
     this.rank = 1 ;
+    this.color = colors[PLAYER_COUNT - 1] ;
 
   }
 
@@ -53,7 +56,8 @@ public class Player{
               "Score: " + score + "\n" +
               "Location: " + location.roomName + "\n"+
               "Current Role: not working \n"+
-              "Rehearsal Bonus: " +rehearsalBonus
+              "Rehearsal Bonus: " +rehearsalBonus +
+              "\nColor: " + color
 
     ) ;
 
@@ -68,7 +72,8 @@ public class Player{
               "Score: " + score + "\n" +
               "Location: " + location.roomName + "\n"+
               "Current Role: "+ role.name+ "\n"+
-              "Rehearsal Bonus: " + rehearsalBonus
+              "Rehearsal Bonus : " + rehearsalBonus +
+              "\nColor: " + color
 
     ) ;
 
