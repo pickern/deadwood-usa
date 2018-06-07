@@ -21,6 +21,7 @@ public class BoardDisplay extends JFrame {
       private JTextArea output;
       private ArrayList<JLabel> playerLabels= new ArrayList();
       private ArrayList<JLabel> cardLabels = new ArrayList();
+      private ArrayList<JLabel> smLabels= new ArrayList();
       public volatile static String in = "" ;
 
       public BoardDisplay(ArrayList<Player> players, ArrayDeque<SceneCard> activeScenes){
@@ -170,9 +171,18 @@ public class BoardDisplay extends JFrame {
             char color= player.color;
             int rank= player.getRank();
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
-            
+            int x;
+            int offset= 50;
+            int playersInRoom= player.location.playersInRoom.size();
             //coordinates
-            int x= player.location.x ;
+            if ( playersInRoom > 1){
+                  x= player.location.x+ ((playersInRoom-1)*offset);
+                  
+            }
+            else
+             x= player.location.x ;
+             
+             
             int y= player.location.y + 125;
             //
             
@@ -194,8 +204,8 @@ public class BoardDisplay extends JFrame {
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
             
             //coordinates
-            int x= player.role.y ;
-            int y= player.role.x;
+            int x= player.role.x ;
+            int y= player.role.y;
             //
             
                 
@@ -208,6 +218,17 @@ public class BoardDisplay extends JFrame {
 
       
       
+      
+      }
+      
+      public void addMarker(Room location){
+            
+           
+           
+           JLabel smLabel= smlabel(location);
+           bPane.add(smLabel, new Integer(3));
+           smLabels.add(smLabel);
+           
       
       }
          
@@ -279,13 +300,19 @@ public class BoardDisplay extends JFrame {
 
       
       }
-      public JLabel smlabel(String filename/*, Room location*/){
+      public JLabel smlabel(Room location){
             
             JLabel smlabel = new JLabel();
-            ImageIcon smIcon =  new ImageIcon("GUIFiles/"+filename);
+            int remaining= location.shotsRemaining;
+            int x= location.shotLocations[(location.shotMarkers-1)- remaining][0];
+            int y= location.shotLocations[(location.shotMarkers-1)- remaining][1];
+            //file name is always the same
+            
+            ImageIcon smIcon =  new ImageIcon("GUIFiles/shotmarker.png");
             smlabel.setIcon(smIcon); 
-            smlabel.setBounds(442+10,156,39+3,46); // Jail Take 1
+            smlabel.setBounds(39, 46, x, y); // Jail Take 1
             smlabel.setOpaque(true);
+            
                   return smlabel;            
 
       

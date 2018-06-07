@@ -228,6 +228,7 @@ public class Player{
         }
         location.advanceScene() ;
         GameSystem.display.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
+        GameSystem.display.addMarker(location);
       } else if(!onCard){
         changeMoney(1) ;
         GameSystem.display.println("Better luck next time... You didn't finish the shot.\n");
