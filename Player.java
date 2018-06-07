@@ -97,7 +97,7 @@ public class Player{
       money = 0 ;
     }
     else{
-      money = change ;
+      money += change ;
     }
   }
 
@@ -107,7 +107,7 @@ public class Player{
       fame = 0 ;
     }
     else{
-      fame = change ;
+      fame += change ;
     }
 
   }
@@ -203,7 +203,7 @@ public class Player{
 
       //print "Line"
 
-      System.out.println(role.line);
+      GUI.println(role.line);
 
 
       for(Role role: location.extraRoles){
@@ -227,12 +227,12 @@ public class Player{
           changeMoney(1) ;
         }
         location.advanceScene() ;
-        System.out.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
+        GUI.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
       } else if(!onCard){
         changeMoney(1) ;
-        System.out.println("Better luck next time... You didn't finish the shot.\n");
+        GUI.println("Better luck next time... You didn't finish the shot.\n");
       }
-      else{System.out.println("Better luck next time... You didn't finish the shot.\n");}
+      else{GUI.println("Better luck next time... You didn't finish the shot.\n");}
 
   }
 

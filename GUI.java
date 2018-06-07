@@ -15,7 +15,7 @@ public class GUI extends JFrame{
   static JTextArea output ;
   static JTextField input ;
   static JScrollPane jScrollPane ;
-  static String in = "" ;
+  volatile static String in = "" ; // For cross - thread communication. I know it's bad
 
   // Constructor
   // Singelton ;)
@@ -65,12 +65,13 @@ public class GUI extends JFrame{
         public void actionPerformed(ActionEvent event){
           in = input.getText() ; // Allows chunks of user input to be accessed by program
           output.append(in + "\n") ;
-          input.setText("") ;
+          input.selectAll() ;
           //Process input
         }
     }) ;
     input.setLocation(1215,500) ;
-    input.setSize(300,20) ;
+
+    input.setSize(400,20) ;
 
     // Create buttons
     JButton act = new JButton("Act") ;
@@ -78,7 +79,8 @@ public class GUI extends JFrame{
     act.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Act") ;
-        output.append("Act") ;
+        output.append("Act" + "\n") ;
+        input.selectAll() ;
       }
     });
 
@@ -87,7 +89,7 @@ public class GUI extends JFrame{
     rehearse.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Rehearse") ;
-        output.append("Rehearse") ;
+        output.append("Rehearse" + "\n") ;
       }
     });
 
@@ -95,8 +97,8 @@ public class GUI extends JFrame{
     move.setBounds(1350,550,50,50) ;
     move.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
+        output.append("Move" + "\n") ;
         in = ("Move") ;
-        output.append("Move\n") ;
       }
     });
 
@@ -119,6 +121,22 @@ public class GUI extends JFrame{
   public static void clearIn(){
     in = "" ;
   }
+
+  // Waits for user input before continuing
+  public static String getInput(){
+    in = "" ;
+      while(true){
+        try{
+          Thread.sleep(100) ; // Hugely reduces CPU strain
+        }catch(Exception e){
+          e.printStackTrace() ;
+        }
+        if (!(in).equals("")){
+          return in ;
+        }
+      }
+  }
+
   // Replacement for println
   public static void println(String out){
     output.append(out + "\n") ;
@@ -164,7 +182,6 @@ public class GUI extends JFrame{
       labelList.add(new JLabel()) ;
       //System.out.println("GUIFiles/" + room.currentScene.img) ;
       labelList.get(i).setIcon(new ImageIcon("GUIFiles/cards/" + room.currentScene.img)) ;
-      System.out.println(room.toString()) ;
       labelList.get(i).setBounds(room.x,room.y,205,115) ;
       labelList.get(i).setOpaque(true) ;
       i++ ;

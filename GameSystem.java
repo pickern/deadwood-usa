@@ -33,12 +33,14 @@ public class GameSystem{
         }
 
             initialize(3);
+
       }
 
       // constructor
       public GameSystem(int numPlayers){
             initialize(numPlayers); // call initialize
       }
+
   //••••••••••••••••••••••••••••••••••••• INITIALIZE ••••••••••••••••••••••••••••••••••••
 
       public static void initialize(int playerCount){
@@ -128,8 +130,6 @@ public class GameSystem{
       // Handles days
       private static void day(){
             boolean endDay= false;
-            //int count= 0; // for testing
-
 
             // display day
             display.println("It's day "+ currentDay + "! \n");
@@ -141,7 +141,6 @@ public class GameSystem{
 
                   turn();     // calls turn
                   nextPlayer();     // updates currentPlay/ nextPlay
-                  //count++;
 
                   //check if day is over
                   if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
@@ -171,6 +170,7 @@ public class GameSystem{
 
             if(answer == 1){ // act
                   //display.println("Acting... currentPlay.workOnRole() called.");
+
                   currentPlay.workOnRole();
 
 
@@ -181,22 +181,17 @@ public class GameSystem{
             }
             else if (answer == 3){ // move
 
-
                   Room room= roomPrompt();   // get destination
 
                   display.println("moving you to " + room.roomName + "...");
 
                   currentPlay.move(room);
 
-
-
-
-                  if(currentPlay.working == false ){
+                  if(currentPlay.working == false && !(currentPlay.location.equals(Room.trailers) || currentPlay.location.equals(Room.office))){
 
                         if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) ){
 
                               chosenRole= rolePrompt(room);
-
 
                               if(chosenRole != null)
                               currentPlay.takeRole(chosenRole);
@@ -261,6 +256,7 @@ public class GameSystem{
             ans = display.in.toLowerCase() ;
 
 
+
             if(ans.equals("no")){
 
                   validInput= true;
@@ -286,7 +282,7 @@ public class GameSystem{
 
             display.println("Which role would you like to choose?");
 
-                  role = scb.nextLine().toLowerCase();
+                  role = GUI.getInput();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
 
@@ -348,6 +344,7 @@ public class GameSystem{
                   }
                   destination = display.in.toLowerCase();
 
+
                         for(int j=0; j< currentPlay.location.adjacentRooms.length; j++){
 
                               if( destination.equals(currentPlay.location.adjacentRooms[j].toLowerCase()) )
@@ -383,11 +380,13 @@ public class GameSystem{
 
             while (ans == 0){// should loop while we don't have a proper response
                   if (currentPlay.working== true){ // if working
+
                    display.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
                    while(display.in.equals("")){
                      in = display.in;
                    }
                    String answer= display.in.toLowerCase();
+
 
                         if(answer.toLowerCase().equals("act")){
                               ans= 1;
@@ -399,12 +398,14 @@ public class GameSystem{
                   } // end if
 
                   else{ // if not working
+
                         display.println("Would you like to move or pass?");
                         while(display.in.equals("")){
                           in = display.in.toLowerCase();
                         }
 
                         String answer = display.in.toLowerCase();    // get destination
+
 
                         if(answer.toLowerCase().equals("move")){
                               ans= 3;
@@ -421,6 +422,7 @@ public class GameSystem{
 
                   } // end while
                   display.clearIn() ;
+
                   return ans;
 
       }
@@ -438,10 +440,13 @@ public class GameSystem{
                   // print table
                   display.println("Rank: "+ (i+2) + " Money: $" +Room.upgradeTable[i][0] + " Fame: "+ Room.upgradeTable[i][1]);
                   // ask for payment method, rank
-                  display.println("Please type in rank then payment type.");
-                        rank = sc.nextInt();
-                        payment= sc.next().toLowerCase();
 
+                  display.println("What rank would you like?");
+                  rank = Integer.parseInt(GUI.getInput());
+                  display.println("How would you like to pay?");
+                  payment= display.getInput().toLowerCase();
+
+                  // Check validity of input
                   if( rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame")) ){
                         properInput= true;
                   }
@@ -452,7 +457,9 @@ public class GameSystem{
 
                   if(currentPlay.getFame() < Room.upgradeTable[rank-2][1] || currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
 
+
                         display.println("Improper input: you cannpt afford this upgrade.");
+
                   }
                }// end for
 
@@ -463,9 +470,9 @@ public class GameSystem{
             currentPlay.changeRank(rank);
 
                   if(payment.equals("money"))
-                        currentPlay.changeMoney(-Room.upgradeTable[rank-2][0]);
+                        currentPlay.changeMoney(Room.upgradeTable[rank-2][0]);
                   else
-                        currentPlay.changeFame(-Room.upgradeTable[rank-2][1]);
+                        currentPlay.changeFame(Room.upgradeTable[rank-2][1]);
 
 
 
