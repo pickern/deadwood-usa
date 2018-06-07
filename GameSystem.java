@@ -30,17 +30,14 @@ public class GameSystem{
         }else{
           GUI.println("Error: Invalid number of players") ;
         }
-
-        // GameSystem test= new GameSystem(3);
-//             test.currentPlay= new Player ("Chris");
-//             test.turn();
-            initialize(3);
+            //initialize(3);
       }
 
       // constructor
       public GameSystem(int numPlayers){
             initialize(numPlayers); // call initialize
       }
+
   //••••••••••••••••••••••••••••••••••••• INITIALIZE ••••••••••••••••••••••••••••••••••••
 
       public static void initialize(int playerCount){
@@ -119,8 +116,6 @@ public class GameSystem{
       // Handles days
       private static void day(){
             boolean endDay= false;
-            //int count= 0; // for testing
-
 
             // display day
             GUI.println("It's day "+ currentDay + "! \n");
@@ -132,7 +127,6 @@ public class GameSystem{
 
                   turn();     // calls turn
                   nextPlayer();     // updates currentPlay/ nextPlay
-                  //count++;
 
                   //check if day is over
                   if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
@@ -161,17 +155,14 @@ public class GameSystem{
             Role chosenRole= null;
 
             if(answer == 1){ // act
-                  //GUI.println("Acting... currentPlay.workOnRole() called.");
                   currentPlay.workOnRole();
 
 
             }
             else if (answer == 2){ // rehearse
-                  //GUI.println("Rehearsing... currentPlay.rehearse() called.");
                   currentPlay.rehearse();
             }
             else if (answer == 3){ // move
-
 
                   Room room= roomPrompt();   // get destination
 
@@ -179,15 +170,11 @@ public class GameSystem{
 
                   currentPlay.move(room);
 
-
-
-
-                  if(currentPlay.working == false ){
+                  if(currentPlay.working == false && !(currentPlay.location.equals(Room.trailers) || currentPlay.location.equals(Room.office))){
 
                         if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) ){
 
                               chosenRole= rolePrompt(room);
-
 
                               if(chosenRole != null)
                               currentPlay.takeRole(chosenRole);
@@ -245,11 +232,8 @@ public class GameSystem{
       GUI.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
       // list possible roles
 
-            // Temporary loop for getting stuff from textfield, will be replaced by a method
-            while(GUI.in.equals("")){
-              ans = GUI.in.toLowerCase() ;
-            }
-            ans = GUI.in.toLowerCase() ;
+            // Gets input from textfield
+            ans = GUI.getInput().toLowerCase() ;
 
 
             if(ans.equals("no")){
@@ -263,7 +247,6 @@ public class GameSystem{
             else{
                   GUI.println("Improper input: please choose yes or no... \n Let's try again...");
             }
-            GUI.clearIn() ;
       }
 
       validInput= false;
@@ -277,7 +260,7 @@ public class GameSystem{
 
             GUI.println("Which role would you like to choose?");
 
-                  role = scb.nextLine().toLowerCase();
+                  role = GUI.getInput();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
 
@@ -334,10 +317,7 @@ public class GameSystem{
                   GUI.println("Where would you like to move to? \n");
 
                   // Wait for input
-                  while(GUI.in.equals("")){
-                    destination = GUI.in.toLowerCase();
-                  }
-                  destination = GUI.in.toLowerCase();
+                  destination = GUI.getInput().toLowerCase();
 
                         for(int j=0; j< currentPlay.location.adjacentRooms.length; j++){
 
@@ -351,7 +331,6 @@ public class GameSystem{
 
                         if (room== null || adjacent== false ){ // ***** NULL OR NOT AN ADJACENT ROOM ***
                           GUI.println("You cannot move to "+ destination+ ". Let's try again.") ;
-                          GUI.clearIn() ;
                           return roomPrompt();
                           }
                         else
@@ -375,10 +354,8 @@ public class GameSystem{
             while (ans == 0){// should loop while we don't have a proper response
                   if (currentPlay.working== true){ // if working
                    GUI.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
-                   while(GUI.in.equals("")){
-                     in = GUI.in;
-                   }
-                   String answer= GUI.in.toLowerCase();
+
+                   String answer= GUI.getInput().toLowerCase();
 
                         if(answer.toLowerCase().equals("act")){
                               ans= 1;
@@ -391,11 +368,8 @@ public class GameSystem{
 
                   else{ // if not working
                         GUI.println("Would you like to move or pass?");
-                        while(GUI.in.equals("")){
-                          in = GUI.in.toLowerCase();
-                        }
 
-                        String answer = GUI.in.toLowerCase();    // get destination
+                        String answer = GUI.getInput().toLowerCase();    // get destination
 
                         if(answer.toLowerCase().equals("move")){
                               ans= 3;
@@ -411,7 +385,6 @@ public class GameSystem{
                         GUI.println("Improper input: Let's try again...");
 
                   } // end while
-                  GUI.clearIn() ;
                   return ans;
 
       }
@@ -429,10 +402,12 @@ public class GameSystem{
                   // print table
                   GUI.println("Rank: "+ (i+2) + " Money: $" +Room.upgradeTable[i][0] + " Fame: "+ Room.upgradeTable[i][1]);
                   // ask for payment method, rank
-                  GUI.println("Please type in rank then payment type.");
-                        rank = sc.nextInt();
-                        payment= sc.next().toLowerCase();
+                  GUI.println("What rank would you like?");
+                  rank = Integer.parseInt(GUI.getInput());
+                  GUI.println("How would you like to pay?");
+                  payment= GUI.getInput().toLowerCase();
 
+                  // Check validity of input
                   if( rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame")) ){
                         properInput= true;
                   }
@@ -443,7 +418,7 @@ public class GameSystem{
 
                   if(currentPlay.getFame() < Room.upgradeTable[rank-2][1] || currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
 
-                        GUI.println("Improper input: you cannpt afford this upgrade.");
+                        GUI.println("Improper input: you cannot afford this upgrade.");
                   }
                }// end for
 
@@ -454,9 +429,9 @@ public class GameSystem{
             currentPlay.changeRank(rank);
 
                   if(payment.equals("money"))
-                        currentPlay.changeMoney(-Room.upgradeTable[rank-2][0]);
+                        currentPlay.changeMoney(Room.upgradeTable[rank-2][0]);
                   else
-                        currentPlay.changeFame(-Room.upgradeTable[rank-2][1]);
+                        currentPlay.changeFame(Room.upgradeTable[rank-2][1]);
 
 
 

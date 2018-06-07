@@ -30,6 +30,7 @@ public class Room{
   public int y ;
   public int w ;
   public int h ;
+  public int[][] shotLocations ;
   public String roomName ;
   public int shotMarkers ;
   static Random rand = new Random() ;
@@ -46,7 +47,9 @@ public class Room{
   ///* Main method for testing
   public static void main(String[] args){
     readRooms() ;
-    System.out.println(sets.getFirst().toString());
+    for(Room room: sets){
+      System.out.println(room.roomName);
+    }
   }//*/
 
   // Constructor
@@ -70,10 +73,6 @@ public class Room{
     this.y = y ;
     this.w = w ;
     this.h = h ;
-    if(!(name.equals("Casting Office") || name.equals("Trailers"))){
-      sets.add(this) ;
-    }
-
     playersInRoom = new ArrayDeque<Player>() ;
   }
 
@@ -151,14 +150,14 @@ public class Room{
         oadjacentRooms[i] = oneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
       }
 
-      Room.trailers = new Room("trailer", -1, tadjacentRooms, null) ;
-      Room.office = new Room("office", -1, oadjacentRooms, null) ;
+      Room.trailers = new Room("Trailer", -1, tadjacentRooms, null) ;
+      Room.office = new Room("Office", -1, oadjacentRooms, null) ;
 
       // Create upgrade table
       upgradeTable = new int[5][2] ;
       for(int i = 0; i < 5; i++){
         if(i == 0){
-          upgradeTable[i][0] = 4;
+          upgradeTable[i][0] = 4 ;
         } else{
           upgradeTable[i][0] = upgradeTable[i-1][0] + 2*(i+2) ;
         }
@@ -188,7 +187,7 @@ public class Room{
     if(currentScene != null && currentScene.flipped){
       sb.append(currentScene.toString());
     }
-    sb.append("\nx: " + x + "\ny: " + y ) ;
+    //sb.append("\nx: " + x + "\ny: " + y ) ;
 
     return sb.toString() ;
   }
@@ -206,11 +205,11 @@ public class Room{
 
   // Returns a Room given String with roomName ** fixed compatability with lower case*
   public static Room stringToRoom(String name){
-      name= name.toLowerCase();
+      name= name.toLowerCase() ;
 
-    if(name.equals("trailers")){
+    if(name.equals("trailer")){
       return Room.trailers ;
-    } else if(name.equals("casting office")){
+    } else if(name.equals("office")){
       return Room.office ;
     } else {
       for(Room room: sets){
