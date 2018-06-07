@@ -45,9 +45,9 @@ public class GameSystem{
 
       public static void initialize(int playerCount){
         // Welcome the players
-        
-        
-        
+
+
+
 
         // Build board
         Room.readRooms() ;
@@ -84,7 +84,7 @@ public class GameSystem{
         }
         // INITIATE DISPLAY
         display = new BoardDisplay(players, SceneCardManager.getActiveScenes());
-        
+
         // Determine first player
         Random rand = new Random() ;
         currentPlay = players.get(rand.nextInt(playerCount)) ;
@@ -95,7 +95,7 @@ public class GameSystem{
         if (nextIndex == players.size())
 
                   nextIndex= 0;
-                  
+
         // DISPLAY WELCOME MESSAGE
         try{
           Scanner welcome = new Scanner(new File("welcome.txt")) ;
@@ -105,17 +105,17 @@ public class GameSystem{
         }catch(Exception FileNotFoundException){
           display.println("Welcome to Deadwood Studios, USA!");
         }
-        
+
         nextPlay= players.get(nextIndex);// initialization of nextPlay
 
         display.println("\n" + currentPlay.playerName + " will be up first. Good luck! \n \n \n") ;
 
         currentDay= 1; // set day to 1
-        
-       
-        
-       
-        
+
+
+
+
+
         day(); // calls day to start the game
       }
 
@@ -250,10 +250,7 @@ public class GameSystem{
       // list possible roles
 
             // Temporary loop for getting stuff from textfield, will be replaced by a method
-            while(display.in.equals("")){
-              ans = display.in.toLowerCase() ;
-            }
-            ans = display.in.toLowerCase() ;
+            ans = display.getInput().toLowerCase() ;
 
 
 
@@ -339,10 +336,7 @@ public class GameSystem{
                   display.println("Where would you like to move to? \n");
 
                   // Wait for input
-                  while(display.in.equals("")){
-                    destination = display.in.toLowerCase();
-                  }
-                  destination = display.in.toLowerCase();
+                  destination = display.getInput().toLowerCase();
 
 
                         for(int j=0; j< currentPlay.location.adjacentRooms.length; j++){
@@ -382,10 +376,7 @@ public class GameSystem{
                   if (currentPlay.working== true){ // if working
 
                    display.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
-                   while(display.in.equals("")){
-                     in = display.in;
-                   }
-                   String answer= display.in.toLowerCase();
+                   String answer= display.getInput().toLowerCase();
 
 
                         if(answer.toLowerCase().equals("act")){
@@ -400,11 +391,7 @@ public class GameSystem{
                   else{ // if not working
 
                         display.println("Would you like to move or pass?");
-                        while(display.in.equals("")){
-                          in = display.in.toLowerCase();
-                        }
-
-                        String answer = display.in.toLowerCase();    // get destination
+                        String answer = display.getInput().toLowerCase();    // get destination
 
 
                         if(answer.toLowerCase().equals("move")){
@@ -526,7 +513,7 @@ public class GameSystem{
 
             display.println("Would you like to play again? ( yes/no )");
 
-                  String newGame= sc.next();
+                  String newGame= display.getInput();
 
                   if(newGame.toLowerCase().equals("yes")){
 
@@ -534,7 +521,7 @@ public class GameSystem{
                         initialize(players.size());
                   }
       }
-        
-      
+
+
 
 }
