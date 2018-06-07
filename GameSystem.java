@@ -26,13 +26,13 @@ public class GameSystem{
 
       public static void main(String[] args){
 
-        if(args.length == 1 && Integer.parseInt(args[0]) > 1 && Integer.parseInt(args[0]) < 9){
+        if(args.length == 1 && Integer.parseInt(args[0]) >= 1 && Integer.parseInt(args[0]) < 9){
           initialize(Integer.parseInt(args[0])) ;
         }else{
           System.out.println("Error: Invalid number of players") ;
         }
 
-            initialize(3);
+            //initialize(3);
 
       }
 
@@ -45,10 +45,6 @@ public class GameSystem{
 
       public static void initialize(int playerCount){
         // Welcome the players
-
-
-
-
         // Build board
         Room.readRooms() ;
 
@@ -87,7 +83,7 @@ public class GameSystem{
 
         display = new BoardDisplay(players, SceneCardManager.getActiveScenes());
 
-        display.println("Dealing....");
+        //display.println("Dealing....");
 
 
         // Determine first player
@@ -102,6 +98,7 @@ public class GameSystem{
                   nextIndex= 0;
 
         // DISPLAY WELCOME MESSAGE
+        /* rip ascii graphic
         try{
           Scanner welcome = new Scanner(new File("welcome.txt")) ;
           while (welcome.hasNextLine()){
@@ -109,7 +106,9 @@ public class GameSystem{
           }
         }catch(Exception FileNotFoundException){
           display.println("Welcome to Deadwood Studios, USA!");
-        }
+        }*/
+
+        display.println("Welcome to Deadwood Studios, USA!");
 
         nextPlay= players.get(nextIndex);// initialization of nextPlay
 
