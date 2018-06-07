@@ -24,6 +24,8 @@ public class Player{
   public Room location ;
   public String playerName ;
   public Role role ;
+  public char color ;
+  static char[] colors = {'b','c','g','o','p','r','v','y'} ;
 
   ///* Main method for testing
   public static void main(String[] args){
@@ -38,13 +40,14 @@ public class Player{
     rank = 1 ;
     this.playerName = "Player " + PLAYER_COUNT ;
     this.rank = 1 ;
+    this.color = colors[PLAYER_COUNT - 1] ;
 
   }
 
   // Returns player's information in a String
   public String playerInfo(){
     int score = getScore();
-    
+
     if(working == false){
     String ans = (playerName + "\n" +
               "Money: $" + money + "\n" +
@@ -53,12 +56,13 @@ public class Player{
               "Score: " + score + "\n" +
               "Location: " + location.roomName + "\n"+
               "Current Role: not working \n"+
-              "Rehearsal Bonus: " +rehearsalBonus
-              
+              "Rehearsal Bonus: " +rehearsalBonus +
+              "\nColor: " + color
+
     ) ;
 
     return ans;
-    
+
     }
     else{
     String ans = (playerName + "\n" +
@@ -68,14 +72,15 @@ public class Player{
               "Score: " + score + "\n" +
               "Location: " + location.roomName + "\n"+
               "Current Role: "+ role.name+ "\n"+
-              "Rehearsal Bonus: " + rehearsalBonus
-              
+              "Rehearsal Bonus : " + rehearsalBonus +
+              "\nColor: " + color
+
     ) ;
 
     return ans;
-    
+
     }
-    
+
   }
 
   // Alternate constructor
@@ -137,6 +142,9 @@ public class Player{
   public int getRehearsalBonus(){
     return rehearsalBonus ;
   }
+  public char getColor(){
+      return color;
+  }
 
   // Turn options \\
 
@@ -158,13 +166,13 @@ public class Player{
     if(location != null){
       location.exit(this) ;
     }
-    
+
     if(destination.equals(Room.office)){
       location= destination;
       location.enter(this);
       GameSystem.upgrade();
-    } 
-      
+    }
+
     location = destination ;
     location.enter(this) ;
   }
@@ -190,13 +198,14 @@ public class Player{
 
   // Work on Role
   public void workOnRole(){
+
       boolean onCard = true;     // true if on card Role, false ihf off card Role
-      
+
       //print "Line"
-      
+
       System.out.println(role.line);
-      
-      
+
+
       for(Role role: location.extraRoles){
         if(this.role.equals(role)){
           onCard = false ;
@@ -219,7 +228,6 @@ public class Player{
         }
         location.advanceScene() ;
         System.out.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
-        
       } else if(!onCard){
         changeMoney(1) ;
         System.out.println("Better luck next time... You didn't finish the shot.\n");
@@ -234,6 +242,6 @@ public class Player{
   }
 
 
-  
+
 
 }
