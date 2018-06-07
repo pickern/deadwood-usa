@@ -45,7 +45,7 @@ public class BoardDisplay extends JFrame {
        setSize(icon.getIconWidth()+200,icon.getIconHeight());
 
       // Create Text areas (needs to be cleaned up)
-       outputPanel = new JPanel() ;
+       outputPanel = new JPanel(new GridBagLayout()) ;
 
        output = new JTextArea() ;
        output.setLocation(900,0) ;
@@ -54,12 +54,43 @@ public class BoardDisplay extends JFrame {
        output.setColumns(30) ;
        output.setRows(31) ;
        JScrollPane jScrollPane = new JScrollPane(output) ;
-       jScrollPane.setPreferredSize(new Dimension(200,480));
-       jScrollPane.setMaximumSize(new Dimension(200,300)) ;
-       jScrollPane.setLocation(25,0) ;
-       outputPanel.add(jScrollPane) ;
+       jScrollPane.setPreferredSize(new Dimension(370,300));
+       jScrollPane.setMaximumSize(new Dimension(370,300)) ;
+       GridBagConstraints c = new GridBagConstraints() ;
+       c.gridx = 0;
+       c.gridy = 0;
+       c.gridwidth = 3;
+       c.gridheight = 2;
+       outputPanel.setSize(370,600) ;
+       outputPanel.add(jScrollPane, c) ;
        outputPanel.setOpaque(true) ;
        jScrollPane.setOpaque(true) ;
+
+       // Make inputList
+       JList inputList = new JList<String>();
+       JScrollPane inputScroll = new JScrollPane(inputList);
+       GridBagConstraints k = new GridBagConstraints();
+       k.gridx = 0;
+       k.gridy = 3;
+       outputPanel.add(inputScroll,k) ;
+
+       // Make select button
+       Button select = new Button("Select") ;
+       GridBagConstraints b = new GridBagConstraints();
+       b.gridx = 2;
+       b.gridy = 3;
+       b.fill = GridBagConstraints.BOTH;
+       select.addActionListener(
+       new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent event){
+           if(inputList.getSelectedValue() != null){
+             in = inputList.getSelectedValue().toString() ;
+             output.append(in + "\n") ;
+           }
+         }
+       }) ;
+       outputPanel.add(select, b) ;
 
       // input text field
       JTextField input = new JTextField() ;
@@ -73,7 +104,7 @@ public class BoardDisplay extends JFrame {
           //Process input
         }
       }) ;
-      input.setLocation(1215,500) ;
+      input.setLocation(1215,600) ;
       input.setSize(300,20) ;
       this.setVisible(true);
 
@@ -84,7 +115,7 @@ public class BoardDisplay extends JFrame {
 
             // Create buttons
       JButton act = new JButton("Act") ;
-      act.setBounds(1230,550,60,50) ;
+      act.setBounds(1230,650,60,50) ;
       act.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Act") ;
@@ -93,7 +124,7 @@ public class BoardDisplay extends JFrame {
       });
 
       JButton rehearse = new JButton("Rehearse") ;
-      rehearse.setBounds(1290,550,60,50) ;
+      rehearse.setBounds(1290,650,60,50) ;
       rehearse.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Rehearse") ;
@@ -102,7 +133,7 @@ public class BoardDisplay extends JFrame {
       });
 
       JButton move = new JButton("Move") ;
-      move.setBounds(1350,550,60,50) ;
+      move.setBounds(1350,650,60,50) ;
       move.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent event) {
          in = ("Move") ;
@@ -194,8 +225,8 @@ public class BoardDisplay extends JFrame {
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
 
             //coordinates
-            int x= player.role.y ;
-            int y= player.role.x;
+            int x= player.role.x ;
+            int y= player.role.y ;
             //
 
 
@@ -219,6 +250,32 @@ public class BoardDisplay extends JFrame {
        in = "" ;
       }
 
+      public static String getInputList(String[] options){
+      // Make list
+      JList list = new JList<String>(options) ;
+      list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      list.setLayoutOrientation(JList.VERTICAL);
+      list.setVisibleRowCount(-1);
+      JScrollPane listScroller = new JScrollPane(list);
+      listScroller.setPreferredSize(new Dimension(250, 200));
+
+
+      // Make select button
+
+      // Wait for input
+      in = "" ;
+        while(true){
+          try{
+            Thread.sleep(100) ; // Hugely reduces CPU strain
+          }catch(Exception e){
+            e.printStackTrace() ;
+          }
+          if (!(in).equals("")){
+            return in ;
+          }
+        }
+
+      }
       // Waits for user input before continuing
       public static String getInput(){
         in = "" ;
