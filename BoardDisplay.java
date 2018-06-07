@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage ;
 import java.awt.Graphics2D ;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.ArrayDeque;
 
 
@@ -24,26 +24,26 @@ public class BoardDisplay extends JFrame {
       public volatile static String in = "" ;
 
       public BoardDisplay(ArrayList<Player> players, ArrayDeque<SceneCard> activeScenes){
-            
+
        super("Deadwood");
        // Set the exit option for the JFrame
        setDefaultCloseOperation(EXIT_ON_CLOSE);
-      
+
        // Create the JLayeredPane to hold the display, cards, dice and buttons
        bPane = getLayeredPane();
-    
+
        // Create the deadwood board
        boardlabel = new JLabel();
        ImageIcon icon =  new ImageIcon("GUIFiles/board.jpg");
-       boardlabel.setIcon(icon); 
+       boardlabel.setIcon(icon);
        boardlabel.setBounds(0,0,icon.getIconWidth(),icon.getIconHeight());
-      
+
        // Add the board to the lowest layer
        bPane.add(boardlabel, new Integer(0));
-      
+
        // Set the size of the GUI
-       setSize(icon.getIconWidth()+200,icon.getIconHeight());     
-       
+       setSize(icon.getIconWidth()+200,icon.getIconHeight());
+
       // Create Text areas (needs to be cleaned up)
        outputPanel = new JPanel() ;
 
@@ -76,12 +76,12 @@ public class BoardDisplay extends JFrame {
       input.setLocation(1215,500) ;
       input.setSize(300,20) ;
       this.setVisible(true);
-      
+
       // put players in trailers
-      
+
       toTrailers(players);
-      setSceneLabels(activeScenes);
-      
+      //setSceneLabels(activeScenes);
+
             // Create buttons
       JButton act = new JButton("Act") ;
       act.setBounds(1230,550,60,50) ;
@@ -118,21 +118,21 @@ public class BoardDisplay extends JFrame {
              bPane.add(move) ;
              this.add(outputPanel, BorderLayout.EAST) ;
              boardlabel.setOpaque(true) ;
-             
+
       }//end constructor
-      
-      public void toTrailers(players){
-      
+
+      public void toTrailers(ArrayList<Player> players){
+
             ////////////////////////////////////// Player labels for Trailers ///////////////////
       String s= "";
       String color= "";
       String rank= "";
       JLabel label;
       int offset= 50;
-      
+
       for(Player player: players){
-      
-            
+
+
             color = Character.toString(player.color);
             rank = Integer.toString(player.getRank());
             s = new String (color+rank+".png");
@@ -141,21 +141,22 @@ public class BoardDisplay extends JFrame {
             bPane.add(label, new Integer(2));
             offset= offset+50; // offset the icons
       }
-      
-      
-      
+
+
+
       }
       ////////////////////////////////// SCENE CARD LABELS /////////////////////////////
-      
+
+      /*
       public void setSceneLabels(ArrayDeque<SceneCard> activeScenes){
-            
+
             int sceneNum;
             JLabel label;
 
-                  
+
             for(SceneCard scene: activeScenes){
-            
-                  
+
+
                   sceneNum = scene.number;
                   rank = Integer.toString(player.getRank());
                   s = new String (sceneNum+".png");
@@ -164,21 +165,23 @@ public class BoardDisplay extends JFrame {
                   bPane.add(label, new Integer(2));
             }
       }
+
       // UPDATE
       public void moveToRoom(Player player){
-            
-            String filename= player.location
-            
-         } 
-         
+
+            String filename= player.location ;
+
+         }
+      */
+
       public void println(String out){
        output.append(out + "\n") ;
-      }  
+      }
       // will be replaced with better method for handling input
       public void clearIn(){
        in = "" ;
-      }   
-      
+      }
+
       // Waits for user input before continuing
       public static String getInput(){
         in = "" ;
@@ -195,64 +198,64 @@ public class BoardDisplay extends JFrame {
       }
       //public void change
       public void pause(){
-            
-            try        
+
+            try
                   {
                   Thread.sleep(1000);
-                  } 
-            catch(InterruptedException ex)            
+                  }
+            catch(InterruptedException ex)
                   {
                   Thread.currentThread().interrupt();
                   }
-      
-      
+
+
       }
-      public JLabel playerlabel(String filename, int x, int y){ 
-            
+      public JLabel playerlabel(String filename, int x, int y){
+
             JLabel playerlabel = new JLabel();
             ImageIcon pIcon = new ImageIcon("GUIFiles/dice/"+filename);
             playerlabel.setIcon(pIcon);
-            playerlabel.setBounds(x+3, y, 46, 46); // Prisoner in Cell Role  
-            playerlabel.setOpaque(true);          
-            return playerlabel;            
-            
-      
+            playerlabel.setBounds(x+3, y, 46, 46); // Prisoner in Cell Role
+            playerlabel.setOpaque(true);
+            return playerlabel;
+
+
       }
-      
+
       public JLabel cardlabel( String filename, Room location){ // will add Room location - using Jail for testing
-            
+
             JLabel cardlabel = new JLabel();
             ImageIcon cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
-            cardlabel.setIcon(cIcon); 
+            cardlabel.setIcon(cIcon);
             cardlabel.setBounds(location.x,location.y,205,115); // Jail Room
             cardlabel.setOpaque(true);
-                  return cardlabel;            
+                  return cardlabel;
 
-      
+
       }
       public JLabel smlabel(String filename/*, Room location*/){
-            
+
             JLabel smlabel = new JLabel();
             ImageIcon smIcon =  new ImageIcon("GUIFiles/"+filename);
-            smlabel.setIcon(smIcon); 
+            smlabel.setIcon(smIcon);
             smlabel.setBounds(442+10,156,39+3,46); // Jail Take 1
             smlabel.setOpaque(true);
-                  return smlabel;            
+                  return smlabel;
 
-      
+
       }
-     // public static void newPlayerLabel(Player currentPlayer, Role location, 
+     // public static void newPlayerLabel(Player currentPlayer, Role location,
       public static void main(String[] args){
-            
-          //   JLabel one= playerlabel("r1.png", new Role( "Crusty Prospector",  "blah blah", 1,114,227,46,46)); 
-//             JLabel two= playerlabel("r2.png", new Role( "Dragged by Train",  "blah blah", 1,51,268,46,46));  
-//             JLabel seven = cardlabel("02.png", Room.roomToString("secret hideout")); 
-//             JLabel three = playerlabel("r3.png",new Role( "Preacher with Bag",  "blah blah", 2,114,320,46,46) ); 
-//             JLabel four = cardlabel("03.png", Room.roomToString("jail")); 
-//             JLabel five = playerlabel("g5.png", new Role( "Cyrus the Gunfighter",  "blah blah", 4,49,356,46,46)); 
-//             JLabel six = smlabel("shotmarker.png"); 
-//                
-       
+
+          //   JLabel one= playerlabel("r1.png", new Role( "Crusty Prospector",  "blah blah", 1,114,227,46,46));
+//             JLabel two= playerlabel("r2.png", new Role( "Dragged by Train",  "blah blah", 1,51,268,46,46));
+//             JLabel seven = cardlabel("02.png", Room.roomToString("secret hideout"));
+//             JLabel three = playerlabel("r3.png",new Role( "Preacher with Bag",  "blah blah", 2,114,320,46,46) );
+//             JLabel four = cardlabel("03.png", Room.roomToString("jail"));
+//             JLabel five = playerlabel("g5.png", new Role( "Cyrus the Gunfighter",  "blah blah", 4,49,356,46,46));
+//             JLabel six = smlabel("shotmarker.png");
+//
+
               // Player p1= new Player()
                // BoardDisplay b = new BoardDisplay();
 //             b.setVisible(true);
@@ -269,9 +272,8 @@ public class BoardDisplay extends JFrame {
 //             b.bPane.add(five,new Integer(5));
 //             pause();
 //             b.bPane.add(six, new Integer(2));
-      
-            
-    
+
+
+
       }
 }
-      
