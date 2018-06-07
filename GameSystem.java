@@ -259,7 +259,7 @@ public class GameSystem{
       display.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? \n It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
       // list possible roles
 
-            ans = display.getInput().toLowerCase() ;
+            ans = display.getInputList(new String[]{"Yes","No"}).toLowerCase() ;
 
             if(ans.equals("no")){
 
@@ -286,7 +286,13 @@ public class GameSystem{
 
             display.println("Which role would you like to choose?");
 
-                  role = display.getInput();
+            // TODO: Create String[] for the roles
+            /*
+            String[] roles = new String[currentRoom.Roles[].length] ;
+            for(it i = 0; i < roles.length; i++){
+              roles[i] = currentRoom.Roles[i].name ;
+            }*/
+            role = display.getInput();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
 
@@ -340,7 +346,7 @@ public class GameSystem{
                         // get destination
                   display.println("Where would you like to move to? \n");
 
-                  destination = display.getInput().toLowerCase();
+                  destination = display.getInputList(currentPlay.location.adjacentRooms).toLowerCase();
 
 
                         for(int j=0; j< currentPlay.location.adjacentRooms.length; j++){
@@ -381,7 +387,7 @@ public class GameSystem{
 
                    display.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
 
-                   String answer= display.getInput().toLowerCase();
+                   String answer= display.getInputList(new String[]{"Act","Rehearse"}).toLowerCase();
 
                         if(answer.toLowerCase().equals("act")){
                               ans= 1;
@@ -396,7 +402,7 @@ public class GameSystem{
 
                         display.println("Would you like to move or pass?");
 
-                        String answer = display.getInput().toLowerCase();    // get destination
+                        String answer = display.getInputList(new String[]{"Move","Pass"}).toLowerCase();    // get destination
 
                         if(answer.equals("move")){
                               ans= 3;
@@ -433,9 +439,9 @@ public class GameSystem{
                   // ask for payment method, rank
 
                   display.println("What rank would you like?");
-                  rank = Integer.parseInt(display.getInput());
+                  rank = Integer.parseInt(display.getInputList(new String[]{"1","2","3","4","5","6"}));
                   display.println("How would you like to pay?");
-                  payment= display.getInput().toLowerCase();
+                  payment= display.getInputList(new String[]{"Money","Fame"}).toLowerCase();
 
                   // Check validity of input
                   if( rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame")) ){
@@ -517,7 +523,7 @@ public class GameSystem{
 
             display.println("Would you like to play again? ( yes/no )");
 
-                  String newGame= display.getInput();
+                  String newGame= display.getInputList(new String[]{"yes","no"}).toLowerCase();
 
                   if(newGame.toLowerCase().equals("yes")){
 

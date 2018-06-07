@@ -17,10 +17,12 @@ public class BoardDisplay extends JFrame {
 
       private JLabel boardlabel;
       private JLayeredPane bPane;
-      private JPanel outputPanel;
+      private volatile static JPanel outputPanel;
       private JTextArea output;
       private ArrayList<JLabel> playerLabels= new ArrayList();
       private ArrayList<JLabel> cardLabels = new ArrayList();
+      public static JList inputList ;
+      public static JScrollPane inputScroll ;
       public volatile static String in = "" ;
 
       public BoardDisplay(ArrayList<Player> players, ArrayDeque<SceneCard> activeScenes){
@@ -67,12 +69,12 @@ public class BoardDisplay extends JFrame {
        jScrollPane.setOpaque(true) ;
 
        // Make inputList
-       JList inputList = new JList<String>();
-       JScrollPane inputScroll = new JScrollPane(inputList);
+       inputList = new JList<String>();
+       inputScroll = new JScrollPane(inputList);
        GridBagConstraints k = new GridBagConstraints();
        k.gridx = 0;
        k.gridy = 3;
-       outputPanel.add(inputScroll,k) ;
+       //outputPanel.add(inputScroll,k) ;
 
        // Make select button
        Button select = new Button("Select") ;
@@ -113,7 +115,7 @@ public class BoardDisplay extends JFrame {
       toTrailers(players);
       setSceneLabels(activeScenes);
 
-            // Create buttons
+      // Create buttons
       JButton act = new JButton("Act") ;
       act.setBounds(1230,650,60,50) ;
       act.addActionListener(new ActionListener() {
@@ -136,17 +138,17 @@ public class BoardDisplay extends JFrame {
       move.setBounds(1350,650,60,50) ;
       move.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent event) {
-         in = ("Move") ;
-        output.append("Move\n") ;
+          in = ("Move") ;
+          output.append("Move\n") ;
         }
       });
 
 
              // Add it all
              bPane.add(input) ;
-             bPane.add(act) ;
-             bPane.add(rehearse) ;
-             bPane.add(move) ;
+             //bPane.add(act) ;
+             //bPane.add(rehearse) ;
+             //bPane.add(move) ;
              this.add(outputPanel, BorderLayout.EAST) ;
              boardlabel.setOpaque(true) ;
 
@@ -250,17 +252,18 @@ public class BoardDisplay extends JFrame {
        in = "" ;
       }
 
+      // Provides the user with a list of options to select
       public static String getInputList(String[] options){
       // Make list
-      JList list = new JList<String>(options) ;
-      list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      list.setLayoutOrientation(JList.VERTICAL);
-      list.setVisibleRowCount(-1);
-      JScrollPane listScroller = new JScrollPane(list);
-      listScroller.setPreferredSize(new Dimension(250, 200));
-
-
-      // Make select button
+      outputPanel.remove(inputScroll) ;
+      inputList = new JList<String>(options) ;
+      inputScroll = new JScrollPane(inputList) ;
+      GridBagConstraints k = new GridBagConstraints() ;
+      k.gridx = 0 ;
+      k.gridy = 3 ;
+      outputPanel.add(inputScroll,k) ;
+      outputPanel.revalidate() ;
+      GameSystem.display.revalidate() ;
 
       // Wait for input
       in = "" ;
@@ -278,6 +281,17 @@ public class BoardDisplay extends JFrame {
       }
       // Waits for user input before continuing
       public static String getInput(){
+        /*
+        DefaultListModel listModel = new DefaultListModel();
+        listModel.addElement("Move");
+        inputList = new JList<String>(listModel) ;
+        JScrollPane inputScroll = new JScrollPane(inputList);
+        GridBagConstraints k = new GridBagConstraints();
+        k.gridx = 0;
+        k.gridy = 3;
+        outputPanel.add(inputScroll,k) ;
+        */
+
         in = "" ;
           while(true){
             try{
