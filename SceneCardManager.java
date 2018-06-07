@@ -95,6 +95,8 @@ public class SceneCardManager {
       activeScenes.add(temp) ; // Should end up with 10 cards
       room.setScene(temp) ;
     }
+    
+    
   }
 
   // To ensure that cards are random every time the game is played

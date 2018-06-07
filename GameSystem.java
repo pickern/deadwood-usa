@@ -83,7 +83,12 @@ public class GameSystem{
           }
         }
         // INITIATE DISPLAY
+        SceneCardManager.deal();
+
         display = new BoardDisplay(players, SceneCardManager.getActiveScenes());
+
+        display.println("Dealing....");
+
 
         // Determine first player
         Random rand = new Random() ;
@@ -121,7 +126,10 @@ public class GameSystem{
 
  //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••
 
-      public static void display(){
+      public static void deal(){
+
+            SceneCardManager.deal();
+            display.setSceneLabels(SceneCardManager.getActiveScenes());
 
       }
 
@@ -133,9 +141,8 @@ public class GameSystem{
 
             // display day
             display.println("It's day "+ currentDay + "! \n");
-            display.println("Dealing....");
-
-            SceneCardManager.deal();
+            if (currentDay != 1)
+                  deal();
 
             while (endDay== false){ // turns loop between players for as long as there are scenes
 
@@ -147,7 +154,7 @@ public class GameSystem{
                         endDay();                                            // there will be only one scene card left
 
             }
-            if (currentDay == days) // finished the last day   (FIX) (currentDay== days)
+            if (currentDay == days) // finished the last day
                   endGame();
             else{
             currentDay++; // increment currentDay
@@ -161,6 +168,7 @@ public class GameSystem{
       // Looks at currentPlay, presents options, handles turn decisions
       private static void turn(){
 
+            display.println("\n*****************************\n");
             display.println("It's "+ currentPlay.playerName+ "'s turn!"+ "\n");
             display.println(currentPlay.playerInfo()) ;
 
@@ -186,6 +194,7 @@ public class GameSystem{
                   display.println("moving you to " + room.roomName + "...");
 
                   currentPlay.move(room);
+                  display.moveToRoom(currentPlay);
 
                   if(currentPlay.working == false && !(currentPlay.location.equals(Room.trailers) || currentPlay.location.equals(Room.office))){
 
@@ -193,8 +202,10 @@ public class GameSystem{
 
                               chosenRole= rolePrompt(room);
 
-                              if(chosenRole != null)
+                              if(chosenRole != null){
                               currentPlay.takeRole(chosenRole);
+                              display.moveToRole(currentPlay);
+                              }
 
                         }
                         else{
@@ -246,13 +257,10 @@ public class GameSystem{
 
       while(validInput == false){
 
-      display.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
+      display.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? \n It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
       // list possible roles
 
-            // Temporary loop for getting stuff from textfield, will be replaced by a method
             ans = display.getInput().toLowerCase() ;
-
-
 
             if(ans.equals("no")){
 
@@ -287,7 +295,6 @@ public class GameSystem{
 
                         answer = offCardRole;
                         validInput= true;
-                        return answer;
                   }
             }
             for(Role onCardRole : currentRoom.currentScene.roles){ // on card roles for current scene
@@ -296,7 +303,6 @@ public class GameSystem{
 
                         answer= onCardRole;
                         validInput= true;
-                        return answer;
                   }
 
             }
@@ -335,7 +341,6 @@ public class GameSystem{
                         // get destination
                   display.println("Where would you like to move to? \n");
 
-                  // Wait for input
                   destination = display.getInput().toLowerCase();
 
 
@@ -376,8 +381,8 @@ public class GameSystem{
                   if (currentPlay.working== true){ // if working
 
                    display.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
-                   String answer= display.getInput().toLowerCase();
 
+                   String answer= display.getInput().toLowerCase();
 
                         if(answer.toLowerCase().equals("act")){
                               ans= 1;
@@ -391,13 +396,13 @@ public class GameSystem{
                   else{ // if not working
 
                         display.println("Would you like to move or pass?");
+
                         String answer = display.getInput().toLowerCase();    // get destination
 
-
-                        if(answer.toLowerCase().equals("move")){
+                        if(answer.equals("move")){
                               ans= 3;
                         }
-                        else if(answer.toLowerCase().equals("pass")){
+                        else if(answer.equals("pass")){
                               ans= 4;
                         }
 

@@ -48,8 +48,8 @@ public class Room{
   public static void main(String[] args){
     readRooms() ;
     for(Room room: sets){
-      System.out.println(room.shotMarkers + " " + room.shotLocations.length);
-      System.out.println("x1:" + room.shotLocations[0][0] + "y1:" + room.shotLocations[0][1]);
+      System.out.println(room.extraRoles[0].name);
+      System.out.println("x1:" + room.extraRoles[0].x + " y1:" + room.extraRoles[0].y);
     }
   }//*/
 
@@ -116,6 +116,8 @@ public class Room{
       String roleName ;
       String line ;
       int reqRank ;
+      int rx;
+      int ry;
 
       // Create sets
       for(int i = 0; i < sets.getLength(); i++){
@@ -139,7 +141,9 @@ public class Room{
           roleName = roles.item(j).getAttributes().getNamedItem("name").getNodeValue() ;
           reqRank = Integer.parseInt(roles.item(j).getAttributes().getNamedItem("level").getNodeValue()) ;
           line = ((Element)roles.item(j)).getElementsByTagName("line").item(0).getTextContent() ;
-          roomRoles[j] = new Role(roleName, line, reqRank) ;
+          rx = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("x").getNodeValue()) ;
+          ry = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("y").getNodeValue()) ;
+          roomRoles[j] = new Role(roleName, line, reqRank, rx, ry) ;
         }
 
         // Get shot marker locations

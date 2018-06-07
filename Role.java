@@ -27,15 +27,13 @@ public class Role{
       }
 
       // Alternate constructor for GUI
-      public Role(String name, String line, int requiredRank, int x, int y, int w, int h){
+      public Role(String name, String line, int requiredRank, int x, int y){
 
             this.name= name;
             this.line= line;
             this.reqRank= requiredRank;
             this.x = x ;
             this.y = y ;
-            this.h = h ;
-            this.w = w ;
 
       }
 

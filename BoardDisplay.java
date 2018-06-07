@@ -80,7 +80,7 @@ public class BoardDisplay extends JFrame {
       // put players in trailers
 
       toTrailers(players);
-      //setSceneLabels(activeScenes);
+      setSceneLabels(activeScenes);
 
             // Create buttons
       JButton act = new JButton("Act") ;
@@ -88,7 +88,7 @@ public class BoardDisplay extends JFrame {
       act.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Act") ;
-        output.append("Act\n") ;
+        output.append("Act") ;
       }
       });
 
@@ -97,7 +97,7 @@ public class BoardDisplay extends JFrame {
       rehearse.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Rehearse") ;
-        output.append("Rehearse\n") ;
+        output.append("Rehearse") ;
       }
       });
 
@@ -147,8 +147,8 @@ public class BoardDisplay extends JFrame {
       }
       ////////////////////////////////// SCENE CARD LABELS /////////////////////////////
 
-
       public void setSceneLabels(ArrayDeque<SceneCard> activeScenes){
+
             JLabel cardLabel ;
             int i = 0 ;
     // Update room-by-room
@@ -157,12 +157,11 @@ public class BoardDisplay extends JFrame {
                   cardLabel= cardlabel(room);
                   cardLabels.add(cardLabel);
                   bPane.add(cardLabel, new Integer(1));
-                  pause();
+                  //pause();
             }
                   //this.setVisible(true) ;
 
       }
-
       // MOVE TO ROOM
       public void moveToRoom(Player player){
 
@@ -170,12 +169,11 @@ public class BoardDisplay extends JFrame {
 
             char color= player.color;
             int rank= player.getRank();
-
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
 
             //coordinates
-            int x= player.location.x;
-            int y= player.location.y - 50;
+            int x= player.location.x ;
+            int y= player.location.y + 125;
             //
 
 
@@ -183,10 +181,35 @@ public class BoardDisplay extends JFrame {
             // create new playerlabel
 
             JLabel playerLabel = playerlabel(filename, x, y);
-            bPane.add(playerLabel);
+            bPane.add(playerLabel, new Integer(2));
             playerLabels.add(playerLabel);
 
          }
+      public void moveToRole(Player player){
+
+            // create filename
+
+            char color= player.color;
+            int rank= player.getRank();
+            String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
+
+            //coordinates
+            int x= player.role.y ;
+            int y= player.role.x;
+            //
+
+
+
+            // create new playerlabel
+
+            JLabel playerLabel = playerlabel(filename, x, y);
+            bPane.add(playerLabel, new Integer(2));
+            playerLabels.add(playerLabel);
+
+
+
+
+      }
 
       public void println(String out){
        output.append(out + "\n") ;
@@ -215,7 +238,7 @@ public class BoardDisplay extends JFrame {
 
             try
                   {
-                  Thread.sleep(1000);
+                  Thread.sleep(500);
                   }
             catch(InterruptedException ex)
                   {
