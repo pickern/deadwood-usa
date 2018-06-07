@@ -148,7 +148,7 @@ public class Player{
 
   // Turn options \\
 
-  // Returns a player's options for display
+  // Returns a player's options for GameSystem.display
   public String turnOptions(){
     if(working){
       return(playerName + " may work, rehearse, or pass the turn") ;
@@ -203,7 +203,7 @@ public class Player{
 
       //print "Line"
 
-      GUI.println(role.line);
+      GameSystem.display.println(role.line);
 
 
       for(Role role: location.extraRoles){
@@ -227,12 +227,12 @@ public class Player{
           changeMoney(1) ;
         }
         location.advanceScene() ;
-        GUI.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
+        GameSystem.display.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
       } else if(!onCard){
         changeMoney(1) ;
-        GUI.println("Better luck next time... You didn't finish the shot.\n");
+        GameSystem.display.println("Better luck next time... You didn't finish the shot.\n");
       }
-      else{GUI.println("Better luck next time... You didn't finish the shot.\n");}
+      else{GameSystem.display.println("Better luck next time... You didn't finish the shot.\n");}
 
   }
 

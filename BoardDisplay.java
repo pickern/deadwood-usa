@@ -88,7 +88,7 @@ public class BoardDisplay extends JFrame {
       act.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Act") ;
-        output.append("Act") ;
+        output.append("Act\n") ;
       }
       });
 
@@ -97,7 +97,7 @@ public class BoardDisplay extends JFrame {
       rehearse.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
         in = ("Rehearse") ;
-        output.append("Rehearse") ;
+        output.append("Rehearse\n") ;
       }
       });
 
@@ -147,32 +147,46 @@ public class BoardDisplay extends JFrame {
       }
       ////////////////////////////////// SCENE CARD LABELS /////////////////////////////
 
-      /*
+
       public void setSceneLabels(ArrayDeque<SceneCard> activeScenes){
+            JLabel cardLabel ;
+            int i = 0 ;
+    // Update room-by-room
 
-            int sceneNum;
-            JLabel label;
-
-
-            for(SceneCard scene: activeScenes){
-
-
-                  sceneNum = scene.number;
-                  rank = Integer.toString(player.getRank());
-                  s = new String (sceneNum+".png");
-                  label = cardlabel(s, );
-                  cardLabels.add(label);
-                  bPane.add(label, new Integer(2));
+            for(Room room: Room.sets){
+                  cardLabel= cardlabel(room);
+                  cardLabels.add(cardLabel);
+                  bPane.add(cardLabel, new Integer(1));
+                  pause();
             }
+                  //this.setVisible(true) ;
+
       }
 
-      // UPDATE
+      // MOVE TO ROOM
       public void moveToRoom(Player player){
 
-            String filename= player.location ;
+            // create filename
+
+            char color= player.color;
+            int rank= player.getRank();
+
+            String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
+
+            //coordinates
+            int x= player.location.x;
+            int y= player.location.y - 50;
+            //
+
+
+
+            // create new playerlabel
+
+            JLabel playerLabel = playerlabel(filename, x, y);
+            bPane.add(playerLabel);
+            playerLabels.add(playerLabel);
 
          }
-      */
 
       public void println(String out){
        output.append(out + "\n") ;
@@ -222,9 +236,18 @@ public class BoardDisplay extends JFrame {
 
       }
 
-      public JLabel cardlabel( String filename, Room location){ // will add Room location - using Jail for testing
+      public JLabel cardlabel(Room location){ // will add Room location - using Jail for testing
 
             JLabel cardlabel = new JLabel();
+
+            int sceneNum = location.currentScene.number;
+            String filename;
+
+            if(sceneNum <10)
+               filename= new String("0"+sceneNum+".png");
+            else
+               filename= new String(sceneNum+".png");
+
             ImageIcon cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
             cardlabel.setIcon(cIcon);
             cardlabel.setBounds(location.x,location.y,205,115); // Jail Room

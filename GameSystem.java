@@ -279,7 +279,7 @@ public class GameSystem{
 
             display.println("Which role would you like to choose?");
 
-                  role = GUI.getInput();
+                  role = display.getInput();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
 
@@ -429,7 +429,7 @@ public class GameSystem{
                   // ask for payment method, rank
 
                   display.println("What rank would you like?");
-                  rank = Integer.parseInt(GUI.getInput());
+                  rank = Integer.parseInt(display.getInput());
                   display.println("How would you like to pay?");
                   payment= display.getInput().toLowerCase();
 
