@@ -157,7 +157,7 @@ public class BoardDisplay extends JFrame {
                   cardLabel= cardlabel(room);
                   cardLabels.add(cardLabel);
                   bPane.add(cardLabel, new Integer(1));
-                  pause();
+                  //pause();
             }
                   //this.setVisible(true) ;
 
@@ -169,12 +169,11 @@ public class BoardDisplay extends JFrame {
             
             char color= player.color;
             int rank= player.getRank();
-            
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
             
             //coordinates
-            int x= player.location.x;
-            int y= player.location.y - 50;
+            int x= player.location.x ;
+            int y= player.location.y + 125;
             //
             
                 
@@ -182,10 +181,35 @@ public class BoardDisplay extends JFrame {
             // create new playerlabel
             
             JLabel playerLabel = playerlabel(filename, x, y);
-            bPane.add(playerLabel);
+            bPane.add(playerLabel, new Integer(2));
             playerLabels.add(playerLabel);
             
          } 
+      public void moveToRole(Player player){
+      
+            // create filename
+            
+            char color= player.color;
+            int rank= player.getRank();
+            String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
+            
+            //coordinates
+            int x= player.role.y ;
+            int y= player.role.x;
+            //
+            
+                
+            
+            // create new playerlabel
+            
+            JLabel playerLabel = playerlabel(filename, x, y);
+            bPane.add(playerLabel, new Integer(2));
+            playerLabels.add(playerLabel);
+
+      
+      
+      
+      }
          
       public void println(String out){
        output.append(out + "\n") ;
@@ -214,7 +238,7 @@ public class BoardDisplay extends JFrame {
             
             try        
                   {
-                  Thread.sleep(1000);
+                  Thread.sleep(500);
                   } 
             catch(InterruptedException ex)            
                   {
