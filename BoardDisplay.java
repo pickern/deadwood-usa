@@ -12,16 +12,15 @@ import java.util.ArrayList;
 import java.util.ArrayDeque;
 
 
-
 public class BoardDisplay extends JFrame {
 
       private JLabel boardlabel;
       private JLayeredPane bPane;
       private static JPanel outputPanel;
       private JTextArea output;
-      private ArrayList<JLabel> playerLabels = new ArrayList();
-      private ArrayList<JLabel> cardLabels = new ArrayList();
-      private ArrayList<JLabel> smLabels= new ArrayList();
+      private ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
+      private ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
+      private ArrayList<JLabel> smLabels= new ArrayList<JLabel>();
       public static JList inputList ;
       public static JScrollPane inputScroll ;
       public volatile static String in = "" ;
@@ -166,7 +165,6 @@ public class BoardDisplay extends JFrame {
 
       for(Player player: players){
 
-
             color = Character.toString(player.color);
             rank = Integer.toString(player.getRank());
             s = new String (color+rank+".png");
@@ -193,8 +191,7 @@ public class BoardDisplay extends JFrame {
                   bPane.add(cardLabel, new Integer(1));
                   //pause();
             }
-            GameSystem.display.revalidate() ;
-                  //this.setVisible(true) ;
+            revalidate() ;
 
       }
       // MOVE TO ROOM
@@ -212,7 +209,6 @@ public class BoardDisplay extends JFrame {
             //coordinates
             if ( playersInRoom > 1){
                   x= player.location.x+ ((playersInRoom-1)*offset);
-
             }
             else
              x= player.location.x ;
@@ -226,23 +222,32 @@ public class BoardDisplay extends JFrame {
             JLabel playerLabel = playerlabel(filename, x, y);
             bPane.add(playerLabel, new Integer(2));
             playerLabels.add(playerLabel);
-
          }
       public void moveToRole(Player player){
 
             // create filename
-
             char color= player.color;
             int rank= player.getRank();
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
 
-            //coordinates
-            int x= player.role.x ;
-            int y= player.role.y;
+            // Check cardonality of role
+            boolean onCard = true ;
+            for(Role role: player.location.extraRoles){
+              if(player.role.equals(role)){
+                onCard = false ;
+              }
+            }
 
-            //
-
-
+            // Assign coordinates
+            int x;
+            int y;
+            if(!onCard){
+              x = player.role.x ;
+              y = player.role.y ;
+            }else{
+              x = player.role.x + player.location.x ;
+              y = player.role.y + player.location.y ;
+            }
 
             // create new playerlabel
 
@@ -299,21 +304,9 @@ public class BoardDisplay extends JFrame {
             return in ;
           }
         }
-
       }
       // Waits for user input before continuing
       public static String getInput(){
-        /*
-        DefaultListModel listModel = new DefaultListModel();
-        listModel.addElement("Move");
-        inputList = new JList<String>(listModel) ;
-        JScrollPane inputScroll = new JScrollPane(inputList);
-        GridBagConstraints k = new GridBagConstraints();
-        k.gridx = 0;
-        k.gridy = 3;
-        outputPanel.add(inputScroll,k) ;
-        */
-
         in = "" ;
           while(true){
             try{
