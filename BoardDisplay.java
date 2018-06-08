@@ -204,8 +204,12 @@ public class BoardDisplay extends JFrame {
             else
              x= player.location.x ;
 
-
-            int y= player.location.y + 125;
+            int y;
+            if(player.location.equals(Room.office)){
+              y= player.location.y;
+            }else{
+              y= player.location.y + 125;
+            }
             //
 
             // create new playerlabel
@@ -293,6 +297,15 @@ public class BoardDisplay extends JFrame {
 
       }
 
+      public void emptySM(){
+
+            smLabels= new ArrayList<JLabel>();
+            Component[] shots= bPane.getComponentsInLayer(3);
+            for(Component shotmarker : shots){
+
+                  bPane.remove(shotmarker);
+            }
+      }
       public void println(String out){
        output.append(out + "\n") ;
       }
@@ -360,7 +373,7 @@ public class BoardDisplay extends JFrame {
             JLabel playerlabel = new JLabel();
             ImageIcon pIcon = new ImageIcon("GUIFiles/dice/"+filename);
             playerlabel.setIcon(pIcon);
-            playerlabel.setBounds(x+3, y, 46, 46); // Prisoner in Cell Role
+            playerlabel.setBounds(x+3, y+3, pIcon.getIconWidth(), pIcon.getIconHeight()); // Prisoner in Cell Role
             playerlabel.setOpaque(true);
             return playerlabel;
 

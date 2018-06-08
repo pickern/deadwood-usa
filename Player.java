@@ -13,7 +13,7 @@ public class Player{
   private int fame ;
   private int rank ;
   public int playerNumber ;
-  public int rehearsalBonus ;
+  public int rehearsalBonus ; 
   public boolean working = false ; // everyone starts not working
   public Room location ;
   public String playerName ;

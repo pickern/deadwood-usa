@@ -25,7 +25,7 @@ public class GameSystem{
           System.out.println("Error: Invalid number of players") ;
         }
 
-            initialize(3);
+            //initialize(5);
 
       }
 
@@ -106,7 +106,7 @@ public class GameSystem{
             display.println("It's day "+ currentDay + "! \n");
             if (currentDay != 1)
                   deal();
-
+            
             while (endDay== false){ // turns loop between players for as long as there are scenes
 
                   turn();     // calls turn
@@ -427,6 +427,8 @@ public class GameSystem{
             for(Player player: players)  // move players back to trailers
 
                   player.move(Room.trailers);
+                  display.moveToRoom(currentPlay);
+                  display.emptySM();
 
             nextPlayer(); // iterate players
 
@@ -472,6 +474,13 @@ public class GameSystem{
                         Player.PLAYER_COUNT= 0;
                         initialize(players.size());
                   }
+                  else{
+                        
+                        display.setVisible(false);
+                        display.dispose();
+                        System.exit(0);
+                  }
+                  
       }
 
 }

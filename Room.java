@@ -155,9 +155,8 @@ public class Room{
         tadjacentRooms[i] = tneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
         oadjacentRooms[i] = oneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
       }
-
-      Room.trailers = new Room("Trailer", -1, tadjacentRooms, null, 9, 459) ;
-      Room.office = new Room("Office", -1, oadjacentRooms, null, 991, 224) ;
+      Room.trailers = new Room("Trailer", -1, tadjacentRooms, null, 991, 224, 0, 0, null) ;
+      Room.office = new Room("Office", -1, oadjacentRooms, null, 9, 459, 0, 0, null ) ;
 
       // Create upgrade table
       upgradeTable = new int[5][2] ;
