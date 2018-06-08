@@ -379,8 +379,8 @@ public class BoardDisplay extends JFrame {
 
             JLabel smlabel = new JLabel();
             int remaining= location.shotsRemaining;
-            int x= location.shotLocations[(location.shotMarkers-1)- remaining][0];
-            int y= location.shotLocations[(location.shotMarkers-1)- remaining][1];
+            int x= location.shotLocations[remaining][0];
+            int y= location.shotLocations[remaining][1];
             //file name is always the same
 
             ImageIcon smIcon =  new ImageIcon("GUIFiles/shotmarker.png");
