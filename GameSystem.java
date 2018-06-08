@@ -1,11 +1,4 @@
 // C.Speckhardt // speckhc // W01240690 // CSCI 345 // 2018.05.04 //
-
-// Changes (Nick)
-//  - Made attributes static
-//  - Added main
-//  - Added initialize()
-
-
 // Game System Class
 
 
@@ -53,11 +46,9 @@ public class GameSystem{
 
         // Create Players
         players = new ArrayList<Player>(playerCount) ;
-        //display.println("\nPlayers: ") ;
         for(int i = 0; i < playerCount; i++){
           players.add(new Player()) ;
           players.get(i).move(Room.trailers) ;
-         // display.println(players.get(i).playerName) ;
         }
 
         // Different setups for different playerCounts
@@ -80,56 +71,29 @@ public class GameSystem{
         }
         // INITIATE DISPLAY
         SceneCardManager.deal();
-
         display = new BoardDisplay(players, SceneCardManager.getActiveScenes());
-
-        //display.println("Dealing....");
-
 
         // Determine first player
         Random rand = new Random() ;
         currentPlay = players.get(rand.nextInt(playerCount)) ;
-
         int nextIndex= players.indexOf(currentPlay)+1;
-
-
         if (nextIndex == players.size())
-
                   nextIndex= 0;
 
         // DISPLAY WELCOME MESSAGE
-        /* rip ascii graphic
-        try{
-          Scanner welcome = new Scanner(new File("welcome.txt")) ;
-          while (welcome.hasNextLine()){
-             display.println(welcome.nextLine());
-          }
-        }catch(Exception FileNotFoundException){
-          display.println("Welcome to Deadwood Studios, USA!");
-        }*/
-
         display.println("Welcome to Deadwood Studios, USA!");
 
         nextPlay= players.get(nextIndex);// initialization of nextPlay
-
         display.println("\n" + currentPlay.playerName + " will be up first. Good luck! \n \n \n") ;
-
         currentDay= 1; // set day to 1
-
-
-
-
-
         day(); // calls day to start the game
       }
 
  //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••
 
       public static void deal(){
-
             SceneCardManager.deal();
             display.setSceneLabels(SceneCardManager.getActiveScenes());
-
       }
 
   //••••••••••••••••••••••••••••••••••••• DAY ••••••••••••••••••••••••••••••••••••
@@ -150,7 +114,7 @@ public class GameSystem{
 
                   //check if day is over
                   if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
-                        endDay();                                            // there will be only one scene card left
+                        endDay();   // there will be only one scene card left
 
             }
             if (currentDay == days) // finished the last day
@@ -176,22 +140,17 @@ public class GameSystem{
             Role chosenRole= null;
 
             if(answer == 1){ // act
-                  //display.println("Acting... currentPlay.workOnRole() called.");
-
                   currentPlay.workOnRole();
 
 
             }
             else if (answer == 2){ // rehearse
-                  //display.println("Rehearsing... currentPlay.rehearse() called.");
                   currentPlay.rehearse();
             }
             else if (answer == 3){ // move
 
                   Room room= roomPrompt();   // get destination
-
                   display.println("moving you to " + room.roomName + "...");
-
                   currentPlay.move(room);
                   display.moveToRoom(currentPlay);
 
@@ -222,7 +181,6 @@ public class GameSystem{
             }
             else{
                   display.println("There was an error with your input, let's try again.....");
-
                   turn();
                 }
 
@@ -252,8 +210,6 @@ public class GameSystem{
       Role answer= null;
       String ans;
       String role;
-
-
       while(validInput == false){
 
       display.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? \n It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
@@ -286,12 +242,6 @@ public class GameSystem{
 
             display.println("Which role would you like to choose?");
 
-            // TODO: Create String[] for the roles
-            /*
-            String[] roles = new String[currentRoom.Roles[].length] ;
-            for(it i = 0; i < roles.length; i++){
-              roles[i] = currentRoom.Roles[i].name ;
-            }*/
             role = display.getInputList(currentRoom.availableRolesArray(currentPlay.getRank())).toLowerCase();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
@@ -322,7 +272,6 @@ public class GameSystem{
 
             }
 
-
       }
 
       return answer;
@@ -338,16 +287,14 @@ public class GameSystem{
             String destination ;
 
             while (validMove== false){
-                        // display adjacent rooms
-
+                  // display adjacent rooms
                   display.println("These are your choices: \n");
                   display.println(currentPlay.location.getMoves());
 
-                        // get destination
+                  // get destination
                   display.println("Where would you like to move to? \n");
 
                   destination = display.getInputList(currentPlay.location.adjacentRooms).toLowerCase();
-
 
                         for(int j=0; j< currentPlay.location.adjacentRooms.length; j++){
 
@@ -367,7 +314,6 @@ public class GameSystem{
                         else
                               validMove= true;
 
-
              }
              return room;
     }
@@ -380,7 +326,6 @@ public class GameSystem{
             int ans= 0;
             boolean input = false;
             String in ;
-
 
             while (ans == 0){// should loop while we don't have a proper response
                   if (currentPlay.working== true){ // if working
@@ -421,66 +366,61 @@ public class GameSystem{
                   display.clearIn() ;
 
                   return ans;
-
       }
   //••••••••••••••••••••••••••••••••••••• UPGRADE ••••••••••••••••••••••••••••••••••••
      public static void upgrade(){
 
-      Scanner sc= new Scanner(System.in);
-      boolean properInput= false;
-      int rank=0;
+      boolean cancel = false ;
+      boolean properInput = false ;
+      int rank=0 ;
       String payment="";
+      String entry ;
 
             while(properInput== false){
 
-                  for(int i=0; i< 5; i++){
-                  // print table
-                  display.println("Rank: "+ (i+2) + " Money: $" +Room.upgradeTable[i][0] + " Fame: "+ Room.upgradeTable[i][1]);
+                  display.println("\nCurrent status:\nRank:" + currentPlay.getRank() +
+                                                  "\nMoney:" + currentPlay.getMoney() +
+                                                  "\nFame:" + currentPlay.getFame()) ;
                   // ask for payment method, rank
-
-                  display.println("What rank would you like?");
-                  rank = Integer.parseInt(display.getInputList(new String[]{"1","2","3","4","5","6"}));
+                  display.println("\nWhat rank would you like?");
+                  entry = display.getInputList(new String[]{"2","3","4","5","6","Actually, I'm good"});
+                  if(entry.equals("Actually, I'm good")){
+                    cancel = true ;
+                    break ;
+                  }else{
+                    rank = Integer.parseInt(entry) ;
+                  }
                   display.println("How would you like to pay?");
                   payment= display.getInputList(new String[]{"Money","Fame"}).toLowerCase();
 
                   // Check validity of input
-                  if( rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame")) ){
+                  if(rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame"))){
+                    if(currentPlay.getFame() < Room.upgradeTable[rank-2][1] || currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
+                        display.println("Improper input: you cannot afford this upgrade.");
+                    }else{
                         properInput= true;
+                    }
                   }
                   else{
                        display.println("Improper input: please choose an appropriate rank and payment type.");
                   }
 
-
-                  if(currentPlay.getFame() < Room.upgradeTable[rank-2][1] || currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
-
-
-                        display.println("Improper input: you cannpt afford this upgrade.");
-
-                  }
-               }// end for
-
             }// end while
 
             // validInput
-
-            currentPlay.changeRank(rank);
-
-                  if(payment.equals("money"))
-                        currentPlay.changeMoney(Room.upgradeTable[rank-2][0]);
-                  else
-                        currentPlay.changeFame(Room.upgradeTable[rank-2][1]);
-
-
-
-
+            if(!cancel){
+              currentPlay.changeRank(rank);
+                    if(payment.equals("money"))
+                          currentPlay.changeMoney(Room.upgradeTable[rank-2][0]);
+                    else
+                          currentPlay.changeFame(Room.upgradeTable[rank-2][1]);
+            }
      }
 
   //••••••••••••••••••••••••••••••••••••• ENDDAY ••••••••••••••••••••••••••••••••••••
   // various end of day necessities
 
       private static void endDay(){
-
 
             for(Player player: players)  // move players back to trailers
 
@@ -523,7 +463,7 @@ public class GameSystem{
 
             display.println("Would you like to play again? ( yes/no )");
 
-                  String newGame= display.getInputList(new String[]{"yes","no"}).toLowerCase();
+                  String newGame= display.getInputList(new String[]{"Yes","No"}).toLowerCase();
 
                   if(newGame.toLowerCase().equals("yes")){
 
@@ -531,7 +471,5 @@ public class GameSystem{
                         initialize(players.size());
                   }
       }
-
-
 
 }

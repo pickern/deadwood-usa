@@ -117,8 +117,8 @@ public class SceneCardManager {
     return activeScenes.size() ;
   }
 
+  // Retunrs activeScenes
   public static ArrayDeque<SceneCard> getActiveScenes(){
-
       return activeScenes;
   }
 

@@ -37,14 +37,4 @@ public class Role{
 
       }
 
-      @Override
-      public String toString(){
-
-            String ans=" ";
-
-           // = this.name+ " ("+ this.description+ ", $"+ this.budget+ " million) \n";
-
-            return ans;
-      }
-
 }
