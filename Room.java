@@ -295,6 +295,7 @@ public class Room{
   public void advanceScene(){
     shotsRemaining-- ;
     if(shotsRemaining == 0){
+      GameSystem.display.println("\nThat's a wrap!");
       wrapScene();
     }
   }
