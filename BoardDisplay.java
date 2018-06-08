@@ -194,11 +194,13 @@ public class BoardDisplay extends JFrame {
                   //pause();
             }
                   //this.setVisible(true) ;
-
+            revalidate();
+            repaint();
       }
       // MOVE TO ROOM
       public void moveToRoom(Player player){
-
+            
+            
             // create filename
 
             char color= player.color;
@@ -225,10 +227,13 @@ public class BoardDisplay extends JFrame {
             // create new playerlabel
 
             JLabel playerLabel = playerlabel(filename, x, y);
+            //** delete old playerlabel for player num
+            deleteLabel(player.playerNumber);
             bPane.add(playerLabel, new Integer(2));
-            playerLabels.add(playerLabel);
+            playerLabels.add(player.playerNumber-1, playerLabel);
 
          }
+      
       public void moveToRole(Player player){
 
             // create filename
@@ -264,6 +269,12 @@ public class BoardDisplay extends JFrame {
            bPane.add(smLabel, new Integer(3));
            smLabels.add(smLabel);
            
+      
+      }
+      public void deleteLabel(int playernum){
+      
+            
+            playerLabels.remove(playernum-1);
       
       }
             
@@ -387,8 +398,9 @@ public class BoardDisplay extends JFrame {
             
             JLabel smlabel = new JLabel();
             int remaining= location.shotsRemaining;
-            int x= location.shotLocations[(location.shotMarkers-1)- remaining][0];
-            int y= location.shotLocations[(location.shotMarkers-1)- remaining][1];
+            int numSM= location.shotMarkers;
+            int x= location.shotLocations[(numSM-1)- remaining][0];
+            int y= location.shotLocations[(numSM-1)- remaining][1];
             //file name is always the same
             
             ImageIcon smIcon =  new ImageIcon("GUIFiles/shotmarker.png");
