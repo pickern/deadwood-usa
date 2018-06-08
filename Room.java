@@ -294,6 +294,10 @@ public class Room{
     return sb.toString() ;
   }
 
+  public String[] availableRolesArray(int playerRank){
+
+  }
+
   // Advances shot marker and pays actor
   public void advanceScene(){
     shotsRemaining-- ;

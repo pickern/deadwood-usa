@@ -17,9 +17,9 @@ public class BoardDisplay extends JFrame {
 
       private JLabel boardlabel;
       private JLayeredPane bPane;
-      private volatile static JPanel outputPanel;
+      private static JPanel outputPanel;
       private JTextArea output;
-      private ArrayList<JLabel> playerLabels= new ArrayList();
+      private ArrayList<JLabel> playerLabels = new ArrayList();
       private ArrayList<JLabel> cardLabels = new ArrayList();
       public static JList inputList ;
       public static JScrollPane inputScroll ;
@@ -192,6 +192,7 @@ public class BoardDisplay extends JFrame {
                   bPane.add(cardLabel, new Integer(1));
                   //pause();
             }
+            GameSystem.display.revalidate() ;
                   //this.setVisible(true) ;
 
       }
@@ -206,10 +207,7 @@ public class BoardDisplay extends JFrame {
 
             //coordinates
             int x= player.location.x ;
-            int y= player.location.y + 125;
-            //
-
-
+            int y= player.location.y + 125 ;
 
             // create new playerlabel
 
