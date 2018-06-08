@@ -292,7 +292,7 @@ public class GameSystem{
             for(it i = 0; i < roles.length; i++){
               roles[i] = currentRoom.Roles[i].name ;
             }*/
-            role = display.getInput();
+            role = display.getInputList(currentRoom.availableRolesArray(currentPlay.getRank())).toLowerCase();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
 
