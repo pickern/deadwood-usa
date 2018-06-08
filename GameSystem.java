@@ -113,8 +113,10 @@ public class GameSystem{
                   nextPlayer();     // updates currentPlay/ nextPlay
 
                   //check if day is over
-                  if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
+                  if(SceneCardManager.activeScenes() == 1){ // if the 2nd to last scene card is discarded,
                         endDay();   // there will be only one scene card left
+                        endDay = true ;
+                  }
 
             }
             if (currentDay == days) // finished the last day
@@ -156,7 +158,7 @@ public class GameSystem{
 
                   if(currentPlay.working == false && !(currentPlay.location.equals(Room.trailers) || currentPlay.location.equals(Room.office))){
 
-                        if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) ){
+                        if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) && room.shotsRemaining > 0){
 
                               chosenRole= rolePrompt(room);
 
@@ -424,7 +426,7 @@ public class GameSystem{
 
             for(Player player: players)  // move players back to trailers
 
-                  player.move(Room.stringToRoom("Trailers"));
+                  player.move(Room.trailers);
 
             nextPlayer(); // iterate players
 
