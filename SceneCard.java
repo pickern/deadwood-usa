@@ -11,6 +11,7 @@ public class SceneCard{
       public int budget;
       public Role[] roles;
       public boolean flipped= false;
+      
 
       // constructor
       public SceneCard(String name, int num, String description, int budget, Role[] roles, String img){

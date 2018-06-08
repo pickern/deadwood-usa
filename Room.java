@@ -48,7 +48,8 @@ public class Room{
   public static void main(String[] args){
     readRooms() ;
     for(Room room: sets){
-      System.out.println(room.roomName);
+      System.out.println(room.extraRoles[0].name);
+      System.out.println("x1:" + room.extraRoles[0].x + " y1:" + room.extraRoles[0].y);
     }
   }//*/
 
@@ -76,6 +77,20 @@ public class Room{
     playersInRoom = new ArrayDeque<Player>() ;
   }
 
+  // Alternate contructor for BOARDdisplay
+  public Room(String name, int shots, String[] adjacents, Role[] roles, int x, int y, int w, int h, int[][] shotLocations){
+    roomName = name ;
+    shotMarkers = shots ;
+    shotsRemaining = shots ;
+    adjacentRooms = adjacents ;
+    extraRoles = roles ;
+    this.shotLocations = shotLocations ;
+    this.x = x ;
+    this.y = y ;
+    this.w = w ;
+    this.h = h ;
+    playersInRoom = new ArrayDeque<Player>() ;
+  }
   // Reads in info from board.xml
   public static void readRooms(){
     try{
@@ -91,6 +106,7 @@ public class Room{
       int shots ;
       String[] adjacentRooms ;
       Role[] roomRoles ;
+      int[][] shotLocations ;
       int x ;
       int y ;
       int w ;
@@ -100,6 +116,8 @@ public class Room{
       String roleName ;
       String line ;
       int reqRank ;
+      int rx;
+      int ry;
 
       // Create sets
       for(int i = 0; i < sets.getLength(); i++){
@@ -123,7 +141,17 @@ public class Room{
           roleName = roles.item(j).getAttributes().getNamedItem("name").getNodeValue() ;
           reqRank = Integer.parseInt(roles.item(j).getAttributes().getNamedItem("level").getNodeValue()) ;
           line = ((Element)roles.item(j)).getElementsByTagName("line").item(0).getTextContent() ;
-          roomRoles[j] = new Role(roleName, line, reqRank) ;
+          rx = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("x").getNodeValue()) ;
+          ry = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("y").getNodeValue()) ;
+          roomRoles[j] = new Role(roleName, line, reqRank, rx, ry) ;
+        }
+
+        // Get shot marker locations
+        NodeList takes = set.getElementsByTagName("take") ;
+        shotLocations = new int[takes.getLength()][2] ;
+        for(int j = 0; j < takes.getLength(); j++){
+          shotLocations[j][0] = Integer.parseInt(((Element)takes.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("x").getNodeValue()) ;
+          shotLocations[j][1] = Integer.parseInt(((Element)takes.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("y").getNodeValue()) ;
         }
 
         // Get GUI attributes
@@ -134,7 +162,7 @@ public class Room{
         h = Integer.parseInt(area.getAttributes().getNamedItem("h").getNodeValue()) ;
 
         // Add to sets
-        Room.sets.add(new Room(roomName, shots, adjacentRooms, roomRoles, x, y, w, h)) ;
+        Room.sets.add(new Room(roomName, shots, adjacentRooms, roomRoles, x, y, w, h, shotLocations)) ;
       }
 
       // Create trailers and casting office

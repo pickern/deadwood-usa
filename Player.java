@@ -148,7 +148,7 @@ public class Player{
 
   // Turn options \\
 
-  // Returns a player's options for display
+  // Returns a player's options for GameSystem.display
   public String turnOptions(){
     if(working){
       return(playerName + " may work, rehearse, or pass the turn") ;
@@ -171,6 +171,11 @@ public class Player{
       location= destination;
       location.enter(this);
       GameSystem.upgrade();
+    }
+    // flip scene card if necessary
+    if(destination != Room.trailers && destination != Room.office && destination.currentScene.flipped == false){
+      destination.currentScene.flipped= true;
+      GameSystem.display.setSceneLabels(SceneCardManager.getActiveScenes());
     }
 
     location = destination ;
@@ -227,8 +232,9 @@ public class Player{
           changeMoney(1) ;
         }
         location.advanceScene() ;
-        GameSystem.display.println("Good job! You finished the shot. You have "+ (location.shotsRemaining -1)+ " remaining. \n");
+        GameSystem.display.println("Good job! You finished the shot. You have "+ (location.shotsRemaining)+ " remaining. \n");
         GameSystem.display.addMarker(location);
+        
       } else if(!onCard){
         changeMoney(1) ;
         GameSystem.display.println("Better luck next time... You didn't finish the shot.\n");

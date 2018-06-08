@@ -26,7 +26,7 @@ public class GameSystem{
 
       public static void main(String[] args){
 
-        if(args.length == 1 && Integer.parseInt(args[0]) > 1 && Integer.parseInt(args[0]) < 9){
+        if(args.length == 1 && Integer.parseInt(args[0]) >= 1 && Integer.parseInt(args[0]) < 9){
           initialize(Integer.parseInt(args[0])) ;
         }else{
           System.out.println("Error: Invalid number of players") ;
@@ -45,10 +45,6 @@ public class GameSystem{
 
       public static void initialize(int playerCount){
         // Welcome the players
-        
-        
-        
-
         // Build board
         Room.readRooms() ;
 
@@ -86,7 +82,9 @@ public class GameSystem{
         SceneCardManager.deal();
 
         display = new BoardDisplay(players, SceneCardManager.getActiveScenes());
-        display.println("Dealing....");
+
+        //display.println("Dealing....");
+
 
         // Determine first player
         Random rand = new Random() ;
@@ -98,8 +96,9 @@ public class GameSystem{
         if (nextIndex == players.size())
 
                   nextIndex= 0;
-                  
+
         // DISPLAY WELCOME MESSAGE
+        /* rip ascii graphic
         try{
           Scanner welcome = new Scanner(new File("welcome.txt")) ;
           while (welcome.hasNextLine()){
@@ -107,25 +106,27 @@ public class GameSystem{
           }
         }catch(Exception FileNotFoundException){
           display.println("Welcome to Deadwood Studios, USA!");
-        }
-        
+        }*/
+
+        display.println("Welcome to Deadwood Studios, USA!");
+
         nextPlay= players.get(nextIndex);// initialization of nextPlay
 
         display.println("\n" + currentPlay.playerName + " will be up first. Good luck! \n \n \n") ;
 
         currentDay= 1; // set day to 1
-        
-       
-        
-       
-        
+
+
+
+
+
         day(); // calls day to start the game
       }
 
  //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••
 
       public static void deal(){
-            
+
             SceneCardManager.deal();
             display.setSceneLabels(SceneCardManager.getActiveScenes());
 
@@ -165,7 +166,7 @@ public class GameSystem{
 
       // Looks at currentPlay, presents options, handles turn decisions
       private static void turn(){
-            
+
             display.println("\n*****************************\n");
             display.println("It's "+ currentPlay.playerName+ "'s turn!"+ "\n");
             display.println(currentPlay.playerInfo()) ;
@@ -190,10 +191,10 @@ public class GameSystem{
                   Room room= roomPrompt();   // get destination
 
                   display.println("moving you to " + room.roomName + "...");
-                  
+
                   currentPlay.move(room);
                   display.moveToRoom(currentPlay);
-                  
+
                   if(currentPlay.working == false && !(currentPlay.location.equals(Room.trailers) || currentPlay.location.equals(Room.office))){
 
                         if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) ){
@@ -258,8 +259,8 @@ public class GameSystem{
       display.println("Would you like to pick one of the roles in "+ currentRoom.roomName+ "? \n It has a budget of $"+ currentRoom.currentScene.budget+ " million.");
       // list possible roles
 
-            // Temporary loop for getting stuff from textfield, will be replaced by a method
-            ans= display.getInput();
+            ans = display.getInputList(new String[]{"Yes","No"}).toLowerCase() ;
+
             if(ans.equals("no")){
 
                   validInput= true;
@@ -285,7 +286,13 @@ public class GameSystem{
 
             display.println("Which role would you like to choose?");
 
-                  role = display.getInput();
+            // TODO: Create String[] for the roles
+            /*
+            String[] roles = new String[currentRoom.Roles[].length] ;
+            for(it i = 0; i < roles.length; i++){
+              roles[i] = currentRoom.Roles[i].name ;
+            }*/
+            role = display.getInput();
 
             for(Role offCardRole: currentRoom.extraRoles){  // off card roles for current scene
 
@@ -339,7 +346,7 @@ public class GameSystem{
                         // get destination
                   display.println("Where would you like to move to? \n");
 
-                  destination = display.getInput().toLowerCase();
+                  destination = display.getInputList(currentPlay.location.adjacentRooms).toLowerCase();
 
 
                         for(int j=0; j< currentPlay.location.adjacentRooms.length; j++){
@@ -379,8 +386,8 @@ public class GameSystem{
                   if (currentPlay.working== true){ // if working
 
                    display.println("Would you like to act or rehearse? Your current budget to beat is $" + currentPlay.location.currentScene.budget+ " million.");
-                   
-                   String answer= display.getInput().toLowerCase();
+
+                   String answer= display.getInputList(new String[]{"Act","Rehearse"}).toLowerCase();
 
                         if(answer.toLowerCase().equals("act")){
                               ans= 1;
@@ -394,8 +401,8 @@ public class GameSystem{
                   else{ // if not working
 
                         display.println("Would you like to move or pass?");
-                        
-                        String answer = display.getInput().toLowerCase();
+
+                        String answer = display.getInputList(new String[]{"Move","Pass"}).toLowerCase();    // get destination
 
                         if(answer.equals("move")){
                               ans= 3;
@@ -432,9 +439,9 @@ public class GameSystem{
                   // ask for payment method, rank
 
                   display.println("What rank would you like?");
-                  rank = Integer.parseInt(GUI.getInput());
+                  rank = Integer.parseInt(display.getInputList(new String[]{"1","2","3","4","5","6"}));
                   display.println("How would you like to pay?");
-                  payment= display.getInput().toLowerCase();
+                  payment= display.getInputList(new String[]{"Money","Fame"}).toLowerCase();
 
                   // Check validity of input
                   if( rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame")) ){
@@ -516,7 +523,7 @@ public class GameSystem{
 
             display.println("Would you like to play again? ( yes/no )");
 
-                  String newGame= sc.next();
+                  String newGame= display.getInputList(new String[]{"yes","no"}).toLowerCase();
 
                   if(newGame.toLowerCase().equals("yes")){
 
@@ -524,7 +531,7 @@ public class GameSystem{
                         initialize(players.size());
                   }
       }
-        
-      
+
+
 
 }
