@@ -19,6 +19,7 @@ public class Player{
   private int money ;
   private int fame ;
   private int rank ;
+  public int playerNumber ;
   public int rehearsalBonus ;
   public boolean working = false ; // everyone starts not working
   public Room location ;
@@ -36,6 +37,7 @@ public class Player{
   // Default constructor
   public Player(){
     PLAYER_COUNT ++ ;
+    playerNumber = PLAYER_COUNT ;
     playerName = "Player " + PLAYER_COUNT ;
     rank = 1 ;
     this.playerName = "Player " + PLAYER_COUNT ;
