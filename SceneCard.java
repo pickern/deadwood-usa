@@ -11,7 +11,7 @@ public class SceneCard{
       public int budget;
       public Role[] roles;
       public boolean flipped= false;
-      
+
 
       // constructor
       public SceneCard(String name, int num, String description, int budget, Role[] roles, String img){
@@ -32,16 +32,6 @@ public class SceneCard{
             this.budget= budget;
             this.roles= roles;
 
-      }
-
-      @Override
-      public String toString(){
-
-            String ans=" ";
-
-           // = this.name+ " ("+ this.description+ ", $"+ this.budget+ " million) \n";
-
-            return ans;
       }
 
 }
