@@ -12,16 +12,15 @@ import java.util.ArrayList;
 import java.util.ArrayDeque;
 
 
-
 public class BoardDisplay extends JFrame {
 
       private JLabel boardlabel;
       private JLayeredPane bPane;
       private static JPanel outputPanel;
       private JTextArea output;
-      private ArrayList<JLabel> playerLabels = new ArrayList();
-      private ArrayList<JLabel> cardLabels = new ArrayList();
-      private ArrayList<JLabel> smLabels= new ArrayList();
+      private ArrayList<JLabel> playerLabels = new ArrayList<JLabel>();
+      private ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
+      private ArrayList<JLabel> smLabels= new ArrayList<JLabel>();
       public static JList inputList ;
       public static JScrollPane inputScroll ;
       public volatile static String in = "" ;
@@ -161,98 +160,9 @@ public class BoardDisplay extends JFrame {
       }//end constructor
       
       
-      //**********  UPDATE ***********
-      // public void update(){
-//       
-//             // delete old display
-//             bPane.removeAll();
-//             
-//             
-//             
-//             // add new display
-//             outputPanel = new JPanel(new GridBagLayout()) ;
-// 
-//             output = new JTextArea() ;
-//             output.setLocation(900,0) ;
-//             output.setEditable(false) ;
-//             output.setLineWrap(true) ;
-//             output.setColumns(30) ;
-//             output.setRows(31) ;
-//             jScrollPane = new JScrollPane(output) ;
-//             jScrollPane.setPreferredSize(new Dimension(200,450));
-//             jScrollPane.setMaximumSize(new Dimension(370,500)) ;
-//             GridBagConstraints c = new GridBagConstraints() ;
-//             c.gridx = 0;
-//             c.gridy = 0;
-//             c.gridwidth = 3;
-//             c.gridheight = 2;
-//             outputPanel.setSize(370,600) ;
-//             outputPanel.add(jScrollPane, c) ;
-//             outputPanel.setOpaque(true) ;
-//             jScrollPane.setOpaque(true) ;
-//             
-//             // Make inputList
-//             inputList = new JList<String>();
-//             inputScroll = new JScrollPane(inputList);
-//             GridBagConstraints k = new GridBagConstraints();
-//             k.gridx = 0;
-//             k.gridy = 3;
-//             //outputPanel.add(inputScroll,k) ;
-//       
-//             // Make select button
-//              select = new Button("Select") ;
-//             GridBagConstraints b = new GridBagConstraints();
-//             b.gridx = 2;
-//             b.gridy = 3;
-//             b.fill = GridBagConstraints.BOTH;
-//             select.addActionListener(
-//             new ActionListener() {
-//               @Override
-//               public void actionPerformed(ActionEvent event){
-//                 if(inputList.getSelectedValue() != null){
-//                   in = inputList.getSelectedValue().toString() ;
-//                   output.append(in + "\n") ;
-//                 }
-//               }
-//             }) ;
-//             outputPanel.add(select, b) ;
-//       
-//             // input text field
-//              input = new JTextField() ;
-//             input.addActionListener(
-//             new ActionListener() {
-//               @Override
-//               public void actionPerformed(ActionEvent event){
-//                 in = input.getText() ; // Allows chunks of user input to be accessed by program
-//                 output.append(in + "\n") ;
-//                 input.setText("") ;
-//                 //Process input
-//               }
-//             }) ;
-//             input.setLocation(1215,750) ;
-//             input.setSize(300,20) ;
-//             this.setVisible(true);
-//       
-//       
-//             bPane.add(outputPanel, new Integer(1));
-//             bPane.add(boardlabel, new Integer(0));
-// 
-//             for(JLabel playerlabel: playerLabels){
-//                   bPane.add(playerlabel, new Integer(2));
-//                   }
-//             for(JLabel cardlabel: cardLabels){
-//                   bPane.add(cardlabel, new Integer(1));
-//                   }
-//             for(JLabel smlabel : smLabels){
-//                   bPane.add(smlabel, new Integer(3));
-//                   }
-//       
-//       
-//       
-//       }
-      public void toTrailers(ArrayList<Player> players){
+            public void toTrailers(ArrayList<Player> players){
 
-            ////////////////////////////////////// Player labels for Trailers ///////////////////
+      ////////////////////////////////////// Player labels for Trailers ///////////////////
       String s= "";
       String color= "";
       String rank= "";
@@ -261,18 +171,16 @@ public class BoardDisplay extends JFrame {
 
       for(Player player: players){
 
-
             color = Character.toString(player.color);
             rank = Integer.toString(player.getRank());
             s = new String (color+rank+".png");
             label = playerlabel(s, 950+offset, 300);
             bPane.add(label, new Integer(2));
             playerLabels.add(label);
-            redrawPlayerLabels();
+            
 
             offset= offset+50; // offset the icons
       }
-
 
 
       }
@@ -283,14 +191,31 @@ public class BoardDisplay extends JFrame {
             JLabel cardLabel ;
             int i = 0 ;
     // Update room-by-room
-
+            
+            //cardLabels= new ArrayList<JLabel>();
+            
             for(Room room: Room.sets){
                   cardLabel= cardlabel(room);
-                  cardLabels.add(cardLabel);
-                  bPane.add(cardLabel, new Integer(1));
+                  
+                  if(cardLabels.size() < i)
+                  cardLabels.remove(i);
+                  
+                  cardLabels.add(i,cardLabel);
+                  i++;
                   
             }
             
+            Component[] scenelabels= bPane.getComponentsInLayer(1);
+            for(Component scene: scenelabels)
+                  bPane.remove(scene);
+            
+            for(JLabel label: cardLabels)
+                  bPane.add(label, new Integer(1));
+                  
+                  
+            revalidate() ;
+            repaint();
+
       }
       // MOVE TO ROOM
       public void moveToRoom(Player player){
@@ -308,7 +233,6 @@ public class BoardDisplay extends JFrame {
             //coordinates
             if ( playersInRoom > 1){
                   x= player.location.x+ ((playersInRoom-1)*offset);
-
             }
             else
              x= player.location.x ;
@@ -324,24 +248,37 @@ public class BoardDisplay extends JFrame {
             deletePlayerLabels(player.playerNumber);
             playerLabels.add(player.playerNumber-1, playerLabel);
             redrawPlayerLabels();
-            
+            revalidate() ;
+            repaint();
+
+
          }
       
       public void moveToRole(Player player){
 
             // create filename
-
             char color= player.color;
             int rank= player.getRank();
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
 
-            //coordinates
-            int x= player.role.x ;
-            int y= player.role.y;
+            // Check cardonality of role
+            boolean onCard = true ;
+            for(Role role: player.location.extraRoles){
+              if(player.role.equals(role)){
+                onCard = false ;
+              }
+            }
 
-            //
-
-
+            // Assign coordinates
+            int x;
+            int y;
+            if(!onCard){
+              x = player.role.x ;
+              y = player.role.y ;
+            }else{
+              x = player.role.x + player.location.x ;
+              y = player.role.y + player.location.y ;
+            }
 
             // create new playerlabel
 
@@ -350,6 +287,8 @@ public class BoardDisplay extends JFrame {
             deletePlayerLabels(player.playerNumber);
             playerLabels.add(player.playerNumber-1, playerLabel);
             redrawPlayerLabels();
+            revalidate() ;
+            repaint();
 
 
 
@@ -420,21 +359,9 @@ public class BoardDisplay extends JFrame {
             return in ;
           }
         }
-
       }
       // Waits for user input before continuing
       public static String getInput(){
-        /*
-        DefaultListModel listModel = new DefaultListModel();
-        listModel.addElement("Move");
-        inputList = new JList<String>(listModel) ;
-        JScrollPane inputScroll = new JScrollPane(inputList);
-        GridBagConstraints k = new GridBagConstraints();
-        k.gridx = 0;
-        k.gridy = 3;
-        outputPanel.add(inputScroll,k) ;
-        */
-
         in = "" ;
           while(true){
             try{
@@ -480,26 +407,25 @@ public class BoardDisplay extends JFrame {
             int sceneNum = location.currentScene.number;
             String filename;
             ImageIcon cIcon;
-            if (location.currentScene.flipped == true){
-
-                  if(sceneNum <10)
-                     filename= new String("0"+sceneNum+".png");
-                  else
-                     filename= new String(sceneNum+".png");
-
-            cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
-            cardlabel.setIcon(cIcon);
-            cardlabel.setBounds(location.x,location.y,205,115); // flipped
-            cardlabel.setOpaque(true);
-            }
-            else {
+            
+            if (location.currentScene.flipped == false){
+            
             cIcon =  new ImageIcon("GUIFiles/cards/cardback.png");
             cardlabel.setIcon(cIcon);
             cardlabel.setBounds(location.x,location.y,205, 115); // not flipped yet
             cardlabel.setOpaque(true);
 
             }
-                  return cardlabel;
+            else{
+
+            filename= location.currentScene.img;
+            cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
+            cardlabel.setIcon(cIcon);
+            cardlabel.setBounds(location.x,location.y,205,115); // flipped
+            cardlabel.setOpaque(true);
+                 }
+
+            return cardlabel;
 
 
       }

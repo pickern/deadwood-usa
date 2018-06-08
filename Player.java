@@ -1,13 +1,6 @@
 // Player class for Deadwood USA
 //
 // Responsible for managing player-related information like score and location
-// TODO:
-//  - Decide on how to implement upgrade
-//  - Flesh out turn options
-//    - also, how workOnRole and PassTurn will function
-//  - Review playerInfo and make sure all necessary info can be printed when needed
-//  - Potentially make move take a String for destination since that might be
-//      the easiest way to store adjacentRooms in Room
 
 import java.lang.StringBuilder ;
 import java.util.Random ;
@@ -28,12 +21,6 @@ public class Player{
   public char color ;
   static char[] colors = {'b','c','g','o','p','r','v','y'} ;
 
-  ///* Main method for testing
-  public static void main(String[] args){
-
-  }
-  //*/
-
   // Default constructor
   public Player(){
     PLAYER_COUNT ++ ;
@@ -43,7 +30,6 @@ public class Player{
     this.playerName = "Player " + PLAYER_COUNT ;
     this.rank = 1 ;
     this.color = colors[PLAYER_COUNT - 1] ;
-
   }
 
   // Returns player's information in a String
@@ -82,14 +68,6 @@ public class Player{
     return ans;
 
     }
-
-  }
-
-  // Alternate constructor
-  public Player(String name){
-    PLAYER_COUNT ++ ;
-    playerName = name ;
-    rank = 1 ;
 
   }
 
@@ -150,19 +128,6 @@ public class Player{
 
   // Turn options \\
 
-  // Returns a player's options for GameSystem.display
-  public String turnOptions(){
-    if(working){
-      return(playerName + " may work, rehearse, or pass the turn") ;
-    }else if(location.shotsRemaining > 0){
-      return(playerName + " may take a role, move, or pass the turn") ;
-    }else if(location.roomName.equals("Casting Office")){
-      return(playerName + " may upgrade, move, or pass the turn") ;
-    }else{
-      return(playerName + " may move or pass the turn") ;
-    }
-  }
-
   // Move
   public void move(Room destination){
     if(location != null){
@@ -206,12 +171,9 @@ public class Player{
   // Work on Role
   public void workOnRole(){
 
-      boolean onCard = true;     // true if on card Role, false ihf off card Role
-
-      //print "Line"
+      boolean onCard = true;     // true if on card Role, false if off card Role
 
       GameSystem.display.println(role.line);
-
 
       for(Role role: location.extraRoles){
         if(this.role.equals(role)){
@@ -222,10 +184,6 @@ public class Player{
 
       int roll = rand.nextInt(6) + 1 ;
       // compare (roll+ currPlay rehearsal bonus) to (currentPlay.location.currentScene.budget)
-      // for (roles in room)
-
-            //    if(role.taken== true && role
-
       if(roll + rehearsalBonus > location.currentScene.budget){
         if(onCard){
           changeFame(2) ;
@@ -236,7 +194,7 @@ public class Player{
         location.advanceScene() ;
         GameSystem.display.println("Good job! You finished the shot. You have "+ (location.shotsRemaining)+ " remaining. \n");
         GameSystem.display.addMarker(location);
-        
+
       } else if(!onCard){
         changeMoney(1) ;
         GameSystem.display.println("Better luck next time... You didn't finish the shot.\n");
@@ -247,10 +205,8 @@ public class Player{
 
   // Rehearse
   public void rehearse(){
+    
+    
     rehearsalBonus++ ;
   }
-
-
-
-
 }

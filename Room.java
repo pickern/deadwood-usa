@@ -1,12 +1,4 @@
 // Room class for Deadwood USA
-//
-// Changes (Nick):
-//  - Added readRooms()
-//  - Added stringToRoom()
-//  - Added enter() and exit() to track player movements, not sure if this is the best way tho
-//  - Made trailers and casting office static
-//  - Changes adjacentRooms from a Room[] to a String[] (Keeps other classes from having to use Room objects as much, made reading in the room info a lot easier too)
-
 
 import java.lang.StringBuilder ;
 import java.util.Arrays ;
@@ -63,21 +55,7 @@ public class Room{
     playersInRoom = new ArrayDeque<Player>() ;
   }
 
-  // Alternate contructor for GUI
-  public Room(String name, int shots, String[] adjacents, Role[] roles, int x, int y, int w, int h){
-    roomName = name ;
-    shotMarkers = shots ;
-    shotsRemaining = shots ;
-    adjacentRooms = adjacents ;
-    extraRoles = roles ;
-    this.x = x ;
-    this.y = y ;
-    this.w = w ;
-    this.h = h ;
-    playersInRoom = new ArrayDeque<Player>() ;
-  }
-
-  // Alternate contructor for BOARDdisplay
+  // Alternate contructor for BoardDisplay
   public Room(String name, int shots, String[] adjacents, Role[] roles, int x, int y, int w, int h, int[][] shotLocations){
     roomName = name ;
     shotMarkers = shots ;
@@ -178,7 +156,6 @@ public class Room{
         oadjacentRooms[i] = oneighbors.item(i).getAttributes().getNamedItem("name").getNodeValue() ;
       }
 
-
       Room.trailers = new Room("Trailer", -1, tadjacentRooms, null) ;
       Room.office = new Room("Office", -1, oadjacentRooms, null) ;
 
@@ -216,7 +193,6 @@ public class Room{
     if(currentScene != null && currentScene.flipped){
       sb.append(currentScene.toString());
     }
-    //sb.append("\nx: " + x + "\ny: " + y ) ;
 
     return sb.toString() ;
   }
@@ -294,6 +270,7 @@ public class Room{
     return sb.toString() ;
   }
 
+  // Delivers an array of role names for getInputList to use
   public String[] availableRolesArray(int playerRank){
     String[] roleNames = new String[extraRoles.length + currentScene.roles.length] ;
     int i = 0 ;
