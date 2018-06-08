@@ -17,14 +17,19 @@ public class BoardDisplay extends JFrame {
 
       private JLabel boardlabel;
       private JLayeredPane bPane;
-      private volatile static JPanel outputPanel;
+      private static JPanel outputPanel;
       private JTextArea output;
-      private ArrayList<JLabel> playerLabels= new ArrayList();
+      private ArrayList<JLabel> playerLabels = new ArrayList();
       private ArrayList<JLabel> cardLabels = new ArrayList();
       private ArrayList<JLabel> smLabels= new ArrayList();
       public static JList inputList ;
       public static JScrollPane inputScroll ;
       public volatile static String in = "" ;
+      private JTextField input;
+      private Button select;
+      private JScrollPane jScrollPane;
+      
+     
 
       public BoardDisplay(ArrayList<Player> players, ArrayDeque<SceneCard> activeScenes){
 
@@ -56,7 +61,7 @@ public class BoardDisplay extends JFrame {
        output.setLineWrap(true) ;
        output.setColumns(30) ;
        output.setRows(31) ;
-       JScrollPane jScrollPane = new JScrollPane(output) ;
+       jScrollPane = new JScrollPane(output) ;
        jScrollPane.setPreferredSize(new Dimension(200,450));
        jScrollPane.setMaximumSize(new Dimension(370,500)) ;
        GridBagConstraints c = new GridBagConstraints() ;
@@ -78,7 +83,7 @@ public class BoardDisplay extends JFrame {
        //outputPanel.add(inputScroll,k) ;
 
        // Make select button
-       Button select = new Button("Select") ;
+        select = new Button("Select") ;
        GridBagConstraints b = new GridBagConstraints();
        b.gridx = 2;
        b.gridy = 3;
@@ -96,7 +101,7 @@ public class BoardDisplay extends JFrame {
        outputPanel.add(select, b) ;
 
       // input text field
-      JTextField input = new JTextField() ;
+       input = new JTextField() ;
       input.addActionListener(
       new ActionListener() {
         @Override
@@ -117,7 +122,7 @@ public class BoardDisplay extends JFrame {
       setSceneLabels(activeScenes);
 
       // Create buttons
-      JButton act = new JButton("Act") ;
+       JButton act = new JButton("Act") ;
       act.setBounds(1230,650,60,50) ;
       act.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
@@ -126,7 +131,7 @@ public class BoardDisplay extends JFrame {
       }
       });
 
-      JButton rehearse = new JButton("Rehearse") ;
+       JButton rehearse = new JButton("Rehearse") ;
       rehearse.setBounds(1290,650,60,50) ;
       rehearse.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
@@ -135,7 +140,7 @@ public class BoardDisplay extends JFrame {
       }
       });
 
-      JButton move = new JButton("Move") ;
+      JButton  move = new JButton("Move") ;
       move.setBounds(1350,650,60,50) ;
       move.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent event) {
@@ -154,7 +159,97 @@ public class BoardDisplay extends JFrame {
              boardlabel.setOpaque(true) ;
 
       }//end constructor
-
+      
+      
+      //**********  UPDATE ***********
+      // public void update(){
+//       
+//             // delete old display
+//             bPane.removeAll();
+//             
+//             
+//             
+//             // add new display
+//             outputPanel = new JPanel(new GridBagLayout()) ;
+// 
+//             output = new JTextArea() ;
+//             output.setLocation(900,0) ;
+//             output.setEditable(false) ;
+//             output.setLineWrap(true) ;
+//             output.setColumns(30) ;
+//             output.setRows(31) ;
+//             jScrollPane = new JScrollPane(output) ;
+//             jScrollPane.setPreferredSize(new Dimension(200,450));
+//             jScrollPane.setMaximumSize(new Dimension(370,500)) ;
+//             GridBagConstraints c = new GridBagConstraints() ;
+//             c.gridx = 0;
+//             c.gridy = 0;
+//             c.gridwidth = 3;
+//             c.gridheight = 2;
+//             outputPanel.setSize(370,600) ;
+//             outputPanel.add(jScrollPane, c) ;
+//             outputPanel.setOpaque(true) ;
+//             jScrollPane.setOpaque(true) ;
+//             
+//             // Make inputList
+//             inputList = new JList<String>();
+//             inputScroll = new JScrollPane(inputList);
+//             GridBagConstraints k = new GridBagConstraints();
+//             k.gridx = 0;
+//             k.gridy = 3;
+//             //outputPanel.add(inputScroll,k) ;
+//       
+//             // Make select button
+//              select = new Button("Select") ;
+//             GridBagConstraints b = new GridBagConstraints();
+//             b.gridx = 2;
+//             b.gridy = 3;
+//             b.fill = GridBagConstraints.BOTH;
+//             select.addActionListener(
+//             new ActionListener() {
+//               @Override
+//               public void actionPerformed(ActionEvent event){
+//                 if(inputList.getSelectedValue() != null){
+//                   in = inputList.getSelectedValue().toString() ;
+//                   output.append(in + "\n") ;
+//                 }
+//               }
+//             }) ;
+//             outputPanel.add(select, b) ;
+//       
+//             // input text field
+//              input = new JTextField() ;
+//             input.addActionListener(
+//             new ActionListener() {
+//               @Override
+//               public void actionPerformed(ActionEvent event){
+//                 in = input.getText() ; // Allows chunks of user input to be accessed by program
+//                 output.append(in + "\n") ;
+//                 input.setText("") ;
+//                 //Process input
+//               }
+//             }) ;
+//             input.setLocation(1215,750) ;
+//             input.setSize(300,20) ;
+//             this.setVisible(true);
+//       
+//       
+//             bPane.add(outputPanel, new Integer(1));
+//             bPane.add(boardlabel, new Integer(0));
+// 
+//             for(JLabel playerlabel: playerLabels){
+//                   bPane.add(playerlabel, new Integer(2));
+//                   }
+//             for(JLabel cardlabel: cardLabels){
+//                   bPane.add(cardlabel, new Integer(1));
+//                   }
+//             for(JLabel smlabel : smLabels){
+//                   bPane.add(smlabel, new Integer(3));
+//                   }
+//       
+//       
+//       
+//       }
       public void toTrailers(ArrayList<Player> players){
 
             ////////////////////////////////////// Player labels for Trailers ///////////////////
@@ -171,8 +266,10 @@ public class BoardDisplay extends JFrame {
             rank = Integer.toString(player.getRank());
             s = new String (color+rank+".png");
             label = playerlabel(s, 950+offset, 300);
-            playerLabels.add(label);
             bPane.add(label, new Integer(2));
+            playerLabels.add(label);
+            redrawPlayerLabels();
+
             offset= offset+50; // offset the icons
       }
 
@@ -191,11 +288,9 @@ public class BoardDisplay extends JFrame {
                   cardLabel= cardlabel(room);
                   cardLabels.add(cardLabel);
                   bPane.add(cardLabel, new Integer(1));
-                  //pause();
+                  
             }
-                  //this.setVisible(true) ;
-            revalidate();
-            repaint();
+            
       }
       // MOVE TO ROOM
       public void moveToRoom(Player player){
@@ -213,25 +308,23 @@ public class BoardDisplay extends JFrame {
             //coordinates
             if ( playersInRoom > 1){
                   x= player.location.x+ ((playersInRoom-1)*offset);
-                  
+
             }
             else
              x= player.location.x ;
-             
-             
+
+
             int y= player.location.y + 125;
             //
-
-
 
             // create new playerlabel
 
             JLabel playerLabel = playerlabel(filename, x, y);
             //** delete old playerlabel for player num
-            deleteLabel(player.playerNumber);
-            bPane.add(playerLabel, new Integer(2));
+            deletePlayerLabels(player.playerNumber);
             playerLabels.add(player.playerNumber-1, playerLabel);
-
+            redrawPlayerLabels();
+            
          }
       
       public void moveToRole(Player player){
@@ -254,30 +347,46 @@ public class BoardDisplay extends JFrame {
 
             JLabel playerLabel = playerlabel(filename, x, y);
             bPane.add(playerLabel, new Integer(2));
-            playerLabels.add(playerLabel);
+            deletePlayerLabels(player.playerNumber);
+            playerLabels.add(player.playerNumber-1, playerLabel);
+            redrawPlayerLabels();
 
 
 
 
       }
-      
+
       public void addMarker(Room location){
-            
-           
-           
+
+
+
            JLabel smLabel= smlabel(location);
-           bPane.add(smLabel, new Integer(3));
            smLabels.add(smLabel);
+           bPane.add(smLabel, new Integer(3));
            
-      
+
       }
-      public void deleteLabel(int playernum){
+      public void deletePlayerLabels(int playernum){
       
             
             playerLabels.remove(playernum-1);
+           
+            Component[] oldPlayers= bPane.getComponentsInLayer(2);
+            
+            for( Component label: oldPlayers)
+                  bPane.remove(label);
+                  
+            
       
       }
-            
+      public void redrawPlayerLabels(){
+      
+            for(JLabel playerlabel: playerLabels){
+               bPane.add(playerlabel, new Integer(2));
+                  }
+      
+      }
+      
       public void println(String out){
        output.append(out + "\n") ;
       }
@@ -372,12 +481,12 @@ public class BoardDisplay extends JFrame {
             String filename;
             ImageIcon cIcon;
             if (location.currentScene.flipped == true){
-            
+
                   if(sceneNum <10)
                      filename= new String("0"+sceneNum+".png");
                   else
                      filename= new String(sceneNum+".png");
-      
+
             cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
             cardlabel.setIcon(cIcon);
             cardlabel.setBounds(location.x,location.y,205,115); // flipped
@@ -388,59 +497,34 @@ public class BoardDisplay extends JFrame {
             cardlabel.setIcon(cIcon);
             cardlabel.setBounds(location.x,location.y,205, 115); // not flipped yet
             cardlabel.setOpaque(true);
-            
+
             }
                   return cardlabel;
-            
+
 
       }
       public JLabel smlabel(Room location){
-            
+
             JLabel smlabel = new JLabel();
             int remaining= location.shotsRemaining;
             int numSM= location.shotMarkers;
             int x= location.shotLocations[(numSM-1)- remaining][0];
             int y= location.shotLocations[(numSM-1)- remaining][1];
             //file name is always the same
-            
+
             ImageIcon smIcon =  new ImageIcon("GUIFiles/shotmarker.png");
-            smlabel.setIcon(smIcon); 
-            smlabel.setBounds(x,y, 39, 46); 
+            smlabel.setIcon(smIcon);
+            smlabel.setBounds(x,y, 39, 46);
             smlabel.setOpaque(true);
-            
-                  return smlabel;            
+
+                  return smlabel;
 
 
       }
      // public static void newPlayerLabel(Player currentPlayer, Role location,
       public static void main(String[] args){
 
-          //   JLabel one= playerlabel("r1.png", new Role( "Crusty Prospector",  "blah blah", 1,114,227,46,46));
-//             JLabel two= playerlabel("r2.png", new Role( "Dragged by Train",  "blah blah", 1,51,268,46,46));
-//             JLabel seven = cardlabel("02.png", Room.roomToString("secret hideout"));
-//             JLabel three = playerlabel("r3.png",new Role( "Preacher with Bag",  "blah blah", 2,114,320,46,46) );
-//             JLabel four = cardlabel("03.png", Room.roomToString("jail"));
-//             JLabel five = playerlabel("g5.png", new Role( "Cyrus the Gunfighter",  "blah blah", 4,49,356,46,46));
-//             JLabel six = smlabel("shotmarker.png");
-//
-
-              // Player p1= new Player()
-               // BoardDisplay b = new BoardDisplay();
-//             b.setVisible(true);
-//             b.bPane.add(one,new Integer(2));
-//             pause();
-//             b.bPane.add(two,new Integer(3));
-//             pause();
-//            // b.bPane.add(seven,new Integer(2));
-//            // pause();
-//             b.bPane.add(three,new Integer(4));
-//             pause();
-//            // b.bPane.add(four,new Integer(3));
-//            // pause();
-//             b.bPane.add(five,new Integer(5));
-//             pause();
-//             b.bPane.add(six, new Integer(2));
-
+        
 
 
       }

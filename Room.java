@@ -294,6 +294,27 @@ public class Room{
     return sb.toString() ;
   }
 
+  public String[] availableRolesArray(int playerRank){
+    String[] roleNames = new String[extraRoles.length + currentScene.roles.length] ;
+    int i = 0 ;
+    // Add off card roles
+    for(Role role: extraRoles){
+      if(!role.taken && playerRank >= role.reqRank){
+        roleNames[i] = role.name ;
+        i++ ;
+      }
+    }
+
+    // Add on card roles
+    for(Role role: currentScene.roles){
+      if(!role.taken && playerRank >= role.reqRank){
+        roleNames[i] = role.name ;
+        i++ ;
+      }
+    }
+    return roleNames ;
+  }
+
   // Advances shot marker and pays actor
   public void advanceScene(){
     shotsRemaining-- ;
