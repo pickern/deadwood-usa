@@ -1,16 +1,20 @@
 Deadwood Studios, USA
-A text-based implementation for CSCI 345, Assignment 2
-Nick Pickering and Chris Speckhardt, May 18th, 2018
+A text-based implementation for CSCI 345, Assignment 3
+Nick Pickering and Chris Speckhardt, June 8th, 2018
 
-To play, compile and run GameSystem.java in the command line, providing a single int argument with
+To play, compile and run Deadwood.java in the command line, providing a single int argument with
 desired number of players.
 
 Files:
+
+Deadwood.java
+  Contains main method, runs the game
+
 GameSystem.java
-  Contains main method and methods handling core gameplay loops
+  Contains methods handling core gameplay loops and coordinates the model-view-controller
 
 Player.java
-  A class for storing player-related information
+  A class for storing player-related information and handling some turn actions
 
 SceneCard.java
   A class for storing Scene information
@@ -24,8 +28,8 @@ Room.java
 
 Role.java
   A class for containing Role information
-
-welcome.txt
-  Introductory ASCII graphic
+  
+BoardDisplay.java
+  Processes user input and updates view
 
 See Class Diagram for more information on class relationships, attributes and methods
