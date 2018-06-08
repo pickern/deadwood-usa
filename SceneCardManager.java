@@ -75,10 +75,7 @@ public class SceneCardManager {
           rx = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("x").getNodeValue()) ;
           ry = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("y").getNodeValue()) ;
           cardRoles[j] = new Role(roleName, line, reqRank, rx, ry) ;
-
         }
-
-
         deck.add(new SceneCard(name, number, description, budget, cardRoles, img)) ;
       }
 
@@ -92,11 +89,10 @@ public class SceneCardManager {
     for(Room room: Room.sets){
       // Sweep up any remaining scenes
       if(!discardPile.contains(room.currentScene) && room.currentScene != null){
-
         discard(room.currentScene) ;
+        room.setScene(null) ;
       }
-
-      SceneCard temp = deck.poll() ;
+      SceneCard temp = deck.pop() ;
       activeScenes.add(temp) ; // Should end up with 10 cards
       room.setScene(temp) ;
     }
@@ -120,6 +116,7 @@ public class SceneCardManager {
   public static int activeScenes(){
     return activeScenes.size() ;
   }
+
   public static ArrayDeque<SceneCard> getActiveScenes(){
 
       return activeScenes;
