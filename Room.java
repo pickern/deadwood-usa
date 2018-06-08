@@ -38,7 +38,7 @@ public class Room{
   public SceneCard currentScene ;
   public Role[] extraRoles ; // Roles should be listed highest paid to lowest
   public String[] adjacentRooms ;
-  private ArrayDeque<Player> playersInRoom ;
+  public ArrayDeque<Player> playersInRoom ;
   static Room trailers ; // Special rooms
   static Room office ;
   static int[][] upgradeTable ; //upgradeTable[][0] is money cost, [][1] is fame cost

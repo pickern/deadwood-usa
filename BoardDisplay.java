@@ -21,6 +21,7 @@ public class BoardDisplay extends JFrame {
       private JTextArea output;
       private ArrayList<JLabel> playerLabels = new ArrayList();
       private ArrayList<JLabel> cardLabels = new ArrayList();
+      private ArrayList<JLabel> smLabels= new ArrayList();
       public static JList inputList ;
       public static JScrollPane inputScroll ;
       public volatile static String in = "" ;
@@ -56,8 +57,8 @@ public class BoardDisplay extends JFrame {
        output.setColumns(30) ;
        output.setRows(31) ;
        JScrollPane jScrollPane = new JScrollPane(output) ;
-       jScrollPane.setPreferredSize(new Dimension(370,300));
-       jScrollPane.setMaximumSize(new Dimension(370,300)) ;
+       jScrollPane.setPreferredSize(new Dimension(200,450));
+       jScrollPane.setMaximumSize(new Dimension(370,500)) ;
        GridBagConstraints c = new GridBagConstraints() ;
        c.gridx = 0;
        c.gridy = 0;
@@ -106,7 +107,7 @@ public class BoardDisplay extends JFrame {
           //Process input
         }
       }) ;
-      input.setLocation(1215,600) ;
+      input.setLocation(1215,750) ;
       input.setSize(300,20) ;
       this.setVisible(true);
 
@@ -204,10 +205,21 @@ public class BoardDisplay extends JFrame {
             char color= player.color;
             int rank= player.getRank();
             String filename= new String(Character.toString(color)+ Integer.toString(rank)+ ".png");
+            int x;
+            int offset= 50;
+            int playersInRoom= player.location.playersInRoom.size();
 
             //coordinates
-            int x= player.location.x ;
-            int y= player.location.y + 125 ;
+            if ( playersInRoom > 1){
+                  x= player.location.x+ ((playersInRoom-1)*offset);
+
+            }
+            else
+             x= player.location.x ;
+
+
+            int y= player.location.y + 125;
+            //
 
             // create new playerlabel
 
@@ -226,7 +238,8 @@ public class BoardDisplay extends JFrame {
 
             //coordinates
             int x= player.role.x ;
-            int y= player.role.y ;
+            int y= player.role.y;
+
             //
 
 
@@ -238,6 +251,17 @@ public class BoardDisplay extends JFrame {
             playerLabels.add(playerLabel);
 
 
+
+
+      }
+
+      public void addMarker(Room location){
+
+
+
+           JLabel smLabel= smlabel(location);
+           bPane.add(smLabel, new Integer(3));
+           smLabels.add(smLabel);
 
 
       }
@@ -334,27 +358,43 @@ public class BoardDisplay extends JFrame {
 
             int sceneNum = location.currentScene.number;
             String filename;
+            ImageIcon cIcon;
+            if (location.currentScene.flipped == true){
 
-            if(sceneNum <10)
-               filename= new String("0"+sceneNum+".png");
-            else
-               filename= new String(sceneNum+".png");
+                  if(sceneNum <10)
+                     filename= new String("0"+sceneNum+".png");
+                  else
+                     filename= new String(sceneNum+".png");
 
-            ImageIcon cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
+            cIcon =  new ImageIcon("GUIFiles/cards/"+ filename);
             cardlabel.setIcon(cIcon);
-            cardlabel.setBounds(location.x,location.y,205,115); // Jail Room
+            cardlabel.setBounds(location.x,location.y,205,115); // flipped
             cardlabel.setOpaque(true);
+            }
+            else {
+            cIcon =  new ImageIcon("GUIFiles/cards/cardback.png");
+            cardlabel.setIcon(cIcon);
+            cardlabel.setBounds(location.x,location.y,205, 115); // not flipped yet
+            cardlabel.setOpaque(true);
+
+            }
                   return cardlabel;
 
 
       }
-      public JLabel smlabel(String filename/*, Room location*/){
+      public JLabel smlabel(Room location){
 
             JLabel smlabel = new JLabel();
-            ImageIcon smIcon =  new ImageIcon("GUIFiles/"+filename);
+            int remaining= location.shotsRemaining;
+            int x= location.shotLocations[(location.shotMarkers-1)- remaining][0];
+            int y= location.shotLocations[(location.shotMarkers-1)- remaining][1];
+            //file name is always the same
+
+            ImageIcon smIcon =  new ImageIcon("GUIFiles/shotmarker.png");
             smlabel.setIcon(smIcon);
-            smlabel.setBounds(442+10,156,39+3,46); // Jail Take 1
+            smlabel.setBounds(x,y, 39, 46);
             smlabel.setOpaque(true);
+
                   return smlabel;
 
 

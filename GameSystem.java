@@ -32,7 +32,7 @@ public class GameSystem{
           System.out.println("Error: Invalid number of players") ;
         }
 
-            //initialize(3);
+            initialize(3);
 
       }
 
