@@ -54,6 +54,8 @@ public class SceneCardManager {
       String roleName;
       String line;
       int reqRank;
+      int rx;
+      int ry;
 
       for(int i = 0; i < cards.getLength(); i++){
         Element element = (Element) cards.item(i) ;
@@ -70,7 +72,10 @@ public class SceneCardManager {
           roleName = roles.item(j).getAttributes().getNamedItem("name").getNodeValue() ;
           reqRank = Integer.parseInt(roles.item(j).getAttributes().getNamedItem("level").getNodeValue()) ;
           line = ((Element)roles.item(j)).getElementsByTagName("line").item(0).getTextContent() ;
-          cardRoles[j] = new Role(roleName, line, reqRank) ;
+          rx = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("x").getNodeValue()) ;
+          ry = Integer.parseInt(((Element)roles.item(j)).getElementsByTagName("area").item(0).getAttributes().getNamedItem("y").getNodeValue()) ;
+          cardRoles[j] = new Role(roleName, line, reqRank, rx, ry) ;
+
         }
 
 
@@ -95,8 +100,8 @@ public class SceneCardManager {
       activeScenes.add(temp) ; // Should end up with 10 cards
       room.setScene(temp) ;
     }
-    
-    
+
+
   }
 
   // To ensure that cards are random every time the game is played
@@ -116,7 +121,7 @@ public class SceneCardManager {
     return activeScenes.size() ;
   }
   public static ArrayDeque<SceneCard> getActiveScenes(){
-  
+
       return activeScenes;
   }
 
