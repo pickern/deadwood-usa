@@ -325,7 +325,15 @@ public class BoardDisplay extends JFrame {
                   }
       
       }
-      
+      public void emptySM(){
+            
+            smLabels= new ArrayList<JLabel>();
+            Component[] shots= bPane.getComponentsInLayer(3); 
+            for(Component shotmarker : shots){
+                  
+                  bPane.remove(shotmarker);
+            }     
+      }
       public void println(String out){
        output.append(out + "\n") ;
       }
@@ -393,7 +401,7 @@ public class BoardDisplay extends JFrame {
             JLabel playerlabel = new JLabel();
             ImageIcon pIcon = new ImageIcon("GUIFiles/dice/"+filename);
             playerlabel.setIcon(pIcon);
-            playerlabel.setBounds(x+3, y, 46, 46); // Prisoner in Cell Role
+            playerlabel.setBounds(x+3, y+3, pIcon.getIconWidth(), pIcon.getIconHeight()); // Prisoner in Cell Role
             playerlabel.setOpaque(true);
             return playerlabel;
 
@@ -433,9 +441,9 @@ public class BoardDisplay extends JFrame {
 
             JLabel smlabel = new JLabel();
             int remaining= location.shotsRemaining;
-            int numSM= location.shotMarkers;
-            int x= location.shotLocations[(numSM-1)- remaining][0];
-            int y= location.shotLocations[(numSM-1)- remaining][1];
+
+            int x= location.shotLocations[remaining][0];
+            int y= location.shotLocations[remaining][1];
             //file name is always the same
 
             ImageIcon smIcon =  new ImageIcon("GUIFiles/shotmarker.png");

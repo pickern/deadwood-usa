@@ -25,7 +25,7 @@ public class GameSystem{
           System.out.println("Error: Invalid number of players") ;
         }
 
-            initialize(3);
+            //initialize(5);
 
       }
 
@@ -106,15 +106,17 @@ public class GameSystem{
             display.println("It's day "+ currentDay + "! \n");
             if (currentDay != 1)
                   deal();
-
+            
             while (endDay== false){ // turns loop between players for as long as there are scenes
 
                   turn();     // calls turn
                   nextPlayer();     // updates currentPlay/ nextPlay
 
                   //check if day is over
-                  if(SceneCardManager.activeScenes() == 1)  // if the 2nd to last scene card is discarded,
+                  if(SceneCardManager.activeScenes() == 1){ // if the 2nd to last scene card is discarded,
                         endDay();   // there will be only one scene card left
+                        endDay = true ;
+                  }
 
             }
             if (currentDay == days) // finished the last day
@@ -156,7 +158,7 @@ public class GameSystem{
 
                   if(currentPlay.working == false && !(currentPlay.location.equals(Room.trailers) || currentPlay.location.equals(Room.office))){
 
-                        if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) ){
+                        if( !(room.showAvailableRoles(currentPlay.getRank()).equals(room.showAvailableRoles(0))) && room.shotsRemaining > 0){
 
                               chosenRole= rolePrompt(room);
 
@@ -424,7 +426,9 @@ public class GameSystem{
 
             for(Player player: players)  // move players back to trailers
 
-                  player.move(Room.stringToRoom("Trailers"));
+                  player.move(Room.trailers);
+                  display.moveToRoom(currentPlay);
+                  display.emptySM();
 
             nextPlayer(); // iterate players
 
@@ -470,6 +474,13 @@ public class GameSystem{
                         Player.PLAYER_COUNT= 0;
                         initialize(players.size());
                   }
+                  else{
+                        
+                        display.setVisible(false);
+                        display.dispose();
+                        System.exit(0);
+                  }
+                  
       }
 
 }
