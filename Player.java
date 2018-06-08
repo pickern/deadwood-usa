@@ -205,8 +205,8 @@ public class Player{
 
   // Rehearse
   public void rehearse(){
-    
-    
+
+
     rehearsalBonus++ ;
   }
 }
