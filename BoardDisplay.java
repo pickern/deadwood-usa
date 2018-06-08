@@ -113,49 +113,16 @@ public class BoardDisplay extends JFrame {
       }) ;
       input.setLocation(1215,750) ;
       input.setSize(300,20) ;
-      this.setVisible(true);
+      this.setVisible(true) ;
 
       // put players in trailers
 
-      toTrailers(players);
-      setSceneLabels(activeScenes);
+      toTrailers(players) ;
+      setSceneLabels(activeScenes) ;
 
-      // Create buttons
-       JButton act = new JButton("Act") ;
-      act.setBounds(1230,650,60,50) ;
-      act.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent event) {
-        in = ("Act") ;
-        output.append("Act") ;
-      }
-      });
-
-       JButton rehearse = new JButton("Rehearse") ;
-      rehearse.setBounds(1290,650,60,50) ;
-      rehearse.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent event) {
-        in = ("Rehearse") ;
-        output.append("Rehearse") ;
-      }
-      });
-
-      JButton  move = new JButton("Move") ;
-      move.setBounds(1350,650,60,50) ;
-      move.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent event) {
-          in = ("Move") ;
-          output.append("Move\n") ;
-        }
-      });
-
-
-             // Add it all
-             bPane.add(input) ;
-             //bPane.add(act) ;
-             //bPane.add(rehearse) ;
-             //bPane.add(move) ;
-             this.add(outputPanel, BorderLayout.EAST) ;
-             boardlabel.setOpaque(true) ;
+      // Add it all
+      this.add(outputPanel, BorderLayout.EAST) ;
+      boardlabel.setOpaque(true) ;
 
       }//end constructor
 
