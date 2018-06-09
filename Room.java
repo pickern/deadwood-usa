@@ -166,7 +166,7 @@ public class Room{
         } else{
           upgradeTable[i][0] = upgradeTable[i-1][0] + 2*(i+2) ;
         }
-        upgradeTable[i][1] = 5 * i ;
+        upgradeTable[i][1] = 5 * (i+1) ;
       }
 
     }catch(Exception e){

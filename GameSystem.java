@@ -106,7 +106,7 @@ public class GameSystem{
             display.println("It's day "+ currentDay + "! \n");
             if (currentDay != 1)
                   deal();
-            
+
             while (endDay== false){ // turns loop between players for as long as there are scenes
 
                   turn();     // calls turn
@@ -397,7 +397,9 @@ public class GameSystem{
 
                   // Check validity of input
                   if(rank > currentPlay.getRank() && rank < 7 && ( payment.equals("money") || payment.equals("fame"))){
-                    if(currentPlay.getFame() < Room.upgradeTable[rank-2][1] || currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
+                    if(payment.equals("money") && currentPlay.getMoney() < Room.upgradeTable[rank-2][0]){
+                        display.println("Improper input: you cannot afford this upgrade.");
+                    }else if(payment.equals("fame") && currentPlay.getFame() < Room.upgradeTable[rank-2][1]){
                         display.println("Improper input: you cannot afford this upgrade.");
                     }else{
                         properInput= true;
@@ -412,10 +414,12 @@ public class GameSystem{
             // validInput
             if(!cancel){
               currentPlay.changeRank(rank);
-                    if(payment.equals("money"))
-                          currentPlay.changeMoney(Room.upgradeTable[rank-2][0]);
-                    else
-                          currentPlay.changeFame(Room.upgradeTable[rank-2][1]);
+                    if(payment.equals("money")){
+                          currentPlay.changeMoney(-Room.upgradeTable[rank-2][0]);
+                    }
+                    else{
+                          currentPlay.changeFame(-Room.upgradeTable[rank-2][1]);
+                    }
             }
      }
 
@@ -475,12 +479,12 @@ public class GameSystem{
                         initialize(players.size());
                   }
                   else{
-                        
+
                         display.setVisible(false);
                         display.dispose();
                         System.exit(0);
                   }
-                  
+
       }
 
 }
