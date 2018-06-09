@@ -100,7 +100,7 @@ public class BoardDisplay extends JFrame {
        outputPanel.add(select, b) ;
 
       // input text field
-       input = new JTextField() ;
+      input = new JTextField() ;
       input.addActionListener(
       new ActionListener() {
         @Override
