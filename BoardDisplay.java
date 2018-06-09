@@ -286,7 +286,8 @@ public class BoardDisplay extends JFrame {
             for( Component label: oldPlayers)
                   bPane.remove(label);
 
-
+            repaint();
+            revalidate();
 
       }
       public void redrawPlayerLabels(){
@@ -294,6 +295,8 @@ public class BoardDisplay extends JFrame {
             for(JLabel playerlabel: playerLabels){
                bPane.add(playerlabel, new Integer(2));
                   }
+            repaint();
+            revalidate();
 
       }
 
@@ -305,6 +308,8 @@ public class BoardDisplay extends JFrame {
 
                   bPane.remove(shotmarker);
             }
+            repaint();
+            revalidate();
       }
       public void println(String out){
        output.append(out + "\n") ;

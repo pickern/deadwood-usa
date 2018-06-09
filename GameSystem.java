@@ -25,7 +25,7 @@ public class GameSystem{
           System.out.println("Error: Invalid number of players") ;
         }
 
-            //initialize(5);
+            initialize(3);
 
       }
 
@@ -89,7 +89,7 @@ public class GameSystem{
         day(); // calls day to start the game
       }
 
- //••••••••••••••••••••••••••••••••••••• DISPLAY ••••••••••••••••••••••••••••••••••••
+ //••••••••••••••••••••••••••••••••••••• DEAL ••••••••••••••••••••••••••••••••••••
 
       public static void deal(){
             SceneCardManager.deal();
@@ -102,11 +102,13 @@ public class GameSystem{
       private static void day(){
             boolean endDay= false;
 
-            // display day
-            display.println("It's day "+ currentDay + "! \n");
             if (currentDay != 1)
                   deal();
-
+            //display.setSceneLabels(SceneCardManager.getActiveScenes());
+            display.println("\n*****************************\n");
+            // display day
+            display.println("It's day "+ currentDay + "! \n");
+            
             while (endDay== false){ // turns loop between players for as long as there are scenes
 
                   turn();     // calls turn
@@ -428,13 +430,24 @@ public class GameSystem{
 
       private static void endDay(){
 
-            for(Player player: players)  // move players back to trailers
+            for(Player player: players){  // move players back to trailers
 
                   player.move(Room.trailers);
-                  display.moveToRoom(currentPlay);
+                  display.moveToRoom(player);
+                  player.working =false;
+                  }
                   display.emptySM();
 
-            nextPlayer(); // iterate players
+                  for(Room room : Room.sets){
+
+                        room.shotsRemaining = room.shotMarkers;
+
+                        for(Role role: room.extraRoles){
+                              role.taken = false;
+                        }
+                  }
+
+                  nextPlayer(); // iterate players
 
 
       }
